@@ -1,0 +1,19 @@
+NPI REGRESSION MODEL REPORT
+============================================================
+
+Generated: 2026-04-05T12:22:30.605540
+Training samples: 1200
+
+R²:            0.7507
+Adjusted R²:   0.7496
+Std Error (σ): 24.1580 s/km
+F-statistic:   718.90
+R² (test):     0.7810
+
+COEFFICIENTS:
+  Intercept            β=  190.2703  SE=  4.7667  t=   39.92
+  Age                  β=    1.7579  SE=  0.0537  t=   32.74
+  BMI                  β=    3.3918  SE=  0.1556  t=   21.80
+  Altitude (m)         β=    0.0365  SE=  0.0009  t=   39.15
+  Distance (m)         β=    0.0047  SE=  0.0003  t=   16.32
+  Gender (F)           β=   13.8648  SE=  1.4272  t=    9.71

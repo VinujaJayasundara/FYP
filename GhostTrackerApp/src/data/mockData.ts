@@ -1,7 +1,10 @@
 /**
  * Ghost-Tracker — Synthetic Data
  * Multi-session improvement data for 5 runners
+ * Includes physical profiles for NPI cross-person comparison
  */
+
+import { calculateNPI, calculateBMI, type RunnerProfile as NPIProfile, type RunContext } from '../core/npiEngine';
 
 export interface RunnerSession {
   id: string;
@@ -24,6 +27,15 @@ export interface RunnerProfile {
   currentPBPace: number;
   totalImprovement: number;
   latestRII: number;
+  // Physical profile for NPI
+  age: number;
+  gender: 'M' | 'F';
+  weightKg: number;
+  heightCm: number;
+  bmi: number;
+  altitudeM: number;
+  npiScore: number;
+  npiLabel: string;
 }
 
 export interface GhostPoint {
@@ -42,30 +54,35 @@ const RUNNERS_RAW = [
     location: 'Bellanwila Park',
     routeDistM: 2500,
     paces: [390, 375, 365, 355, 340, 330], // 6:30 → 5:30
+    age: 22, gender: 'M' as const, weightKg: 68, heightCm: 175, altitudeM: 15,
   },
   {
     name: 'Tharindu',
     location: 'Bellanwila Park',
     routeDistM: 2500,
     paces: [330, 325, 320, 310, 305, 300], // 5:30 → 5:00
+    age: 28, gender: 'M' as const, weightKg: 72, heightCm: 178, altitudeM: 15,
   },
   {
     name: 'Supun',
     location: 'Bellanwila Park',
     routeDistM: 2500,
     paces: [420, 405, 395, 380, 375, 360], // 7:00 → 6:00
+    age: 30, gender: 'M' as const, weightKg: 85, heightCm: 170, altitudeM: 15,
   },
   {
     name: 'Kasun',
     location: 'KDU Clubhouse',
     routeDistM: 1800,
     paces: [360, 350, 340, 335, 325, 320], // 6:00 → 5:20
+    age: 35, gender: 'M' as const, weightKg: 78, heightCm: 180, altitudeM: 510,
   },
   {
     name: 'Malith',
     location: 'KDU Clubhouse',
     routeDistM: 1800,
     paces: [300, 298, 295, 292, 290, 288], // 5:00 → 4:48
+    age: 25, gender: 'M' as const, weightKg: 65, heightCm: 182, altitudeM: 510,
   },
 ];
 
@@ -90,6 +107,22 @@ function generateRunnerProfile(raw: typeof RUNNERS_RAW[0]): RunnerProfile {
   const firstPace = raw.paces[0];
   const lastPace = raw.paces[raw.paces.length - 1];
   const bestPace = Math.min(...raw.paces);
+  const bmi = calculateBMI(raw.weightKg, raw.heightCm);
+
+  // Calculate NPI for latest session
+  const npiProfile: NPIProfile = {
+    age: raw.age,
+    weightKg: raw.weightKg,
+    heightCm: raw.heightCm,
+    bmi,
+    gender: raw.gender,
+  };
+  const npiContext: RunContext = {
+    altitudeM: raw.altitudeM,
+    distanceM: raw.routeDistM,
+    avgPaceSPerKm: lastPace,
+  };
+  const npiResult = calculateNPI(npiProfile, npiContext);
 
   return {
     name: raw.name,
@@ -99,6 +132,14 @@ function generateRunnerProfile(raw: typeof RUNNERS_RAW[0]): RunnerProfile {
     currentPBPace: bestPace,
     totalImprovement: ((1 - lastPace / firstPace) * 100),
     latestRII: firstPace / lastPace,
+    age: raw.age,
+    gender: raw.gender,
+    weightKg: raw.weightKg,
+    heightCm: raw.heightCm,
+    bmi,
+    altitudeM: raw.altitudeM,
+    npiScore: npiResult.npi,
+    npiLabel: npiResult.status.label,
   };
 }
 
@@ -107,6 +148,11 @@ export const RUNNER_PROFILES: RunnerProfile[] = RUNNERS_RAW.map(generateRunnerPr
 // Get leaderboard sorted by improvement
 export function getLeaderboard(): RunnerProfile[] {
   return [...RUNNER_PROFILES].sort((a, b) => b.totalImprovement - a.totalImprovement);
+}
+
+// NPI-ranked leaderboard (cross-person fair comparison)
+export function getNPILeaderboard(): RunnerProfile[] {
+  return [...RUNNER_PROFILES].sort((a, b) => b.npiScore - a.npiScore);
 }
 
 // Generate ghost race data (Vinuja Session 6 vs Ghost Session 1)

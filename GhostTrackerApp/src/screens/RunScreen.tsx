@@ -1,73 +1,45 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+/**
+ * RunScreen — Run Tracking UI (Presentation Only)
+ * ==================================================
+ * All run state, GPS subscription, and timer management have been moved
+ * to RunContext.  This screen is now a pure presentation layer that reads
+ * from the context via useRun() and renders one of three views:
+ *   - IdleView        — map preview + "Start" button
+ *   - RunningView     — live map, stats, stop button
+ *   - FinishedView    — run summary, route map, reset button
+ */
+
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   Platform,
   Dimensions,
   ScrollView,
 } from 'react-native';
-import * as Location from 'expo-location';
-import * as Haptics from 'expo-haptics';
 import {
   haversineDistanceM,
-  calculatePace,
   formatPace,
   formatTime,
   calculateRII,
   getRIIStatus,
-  isValidGPS,
 } from '../core/algorithms';
+import { useRun, type GPSPoint } from '../context/RunContext';
 
-// Conditional imports: react-native-maps is native-only
-let MapView: any = View;
-let Marker: any = View;
-let Polyline: any = View;
-type Region = { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number };
-let WebMap: any = () => null;
-
-if (Platform.OS !== 'web') {
-  // Native: use react-native-maps
-  const Maps = require('react-native-maps');
-  MapView = Maps.default;
-  Marker = Maps.Marker;
-  Polyline = Maps.Polyline;
-} else {
-  // Web: use Leaflet-based fallback
-  WebMap = require('../components/MapViewWeb').default;
-}
+import {
+  IdleMap,
+  RunningMap,
+  FinishedMap,
+  animateMapToRegion,
+  fitMapToCoordinates,
+} from '../components/RunMap';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MAP_HEIGHT = SCREEN_HEIGHT * 0.45;
 
-// ── Types ─────────────────────────────────────────────────
-
-interface GPSPoint {
-  latitude: number;
-  longitude: number;
-  timestamp: number;
-  speed: number | null;
-  accuracy: number | null;
-  seqIndex: number;
-  filtered: boolean;
-}
-
-interface RunState {
-  status: 'idle' | 'running' | 'paused' | 'finished';
-  startTime: number | null;
-  elapsedS: number;
-  distanceM: number;
-  currentPaceSPerKm: number;
-  avgPaceSPerKm: number;
-  points: GPSPoint[];
-  validPoints: GPSPoint[];
-  filteredCount: number;
-  splitPaces: number[];
-}
-
-// ── Ghost position helper ─────────────────────────────────
+// ── Ghost position helper (interpolate along route) ───────
 
 function getPositionAlongRoute(
   points: { latitude: number; longitude: number }[],
@@ -100,244 +72,12 @@ function getPositionAlongRoute(
   return points[points.length - 1];
 }
 
-// ── Component ─────────────────────────────────────────────
+// ── Main Component ────────────────────────────────────────
 
 export default function RunScreen() {
-  const [run, setRun] = useState<RunState>({
-    status: 'idle',
-    startTime: null,
-    elapsedS: 0,
-    distanceM: 0,
-    currentPaceSPerKm: 0,
-    avgPaceSPerKm: 0,
-    points: [],
-    validPoints: [],
-    filteredCount: 0,
-    splitPaces: [],
-  });
-
-  const [initialLocation, setInitialLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-
-  const locationSub = useRef<Location.LocationSubscription | null>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // All state comes from context — no local run state
+  const { run, initialLocation, startRun, stopRun, resetRun } = useRun();
   const mapRef = useRef<any>(null);
-  const seqIndexRef = useRef(0);
-  const lastKmDistRef = useRef(0);
-  const lastKmTimeRef = useRef(0);
-
-  // ── Get initial location on mount ─────────────────────
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === 'granted') {
-        const loc = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.Balanced,
-        });
-        setInitialLocation({
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-        });
-      }
-    })();
-  }, []);
-
-  // ── Timer ─────────────────────────────────────────────
-
-  useEffect(() => {
-    if (run.status === 'running' && run.startTime) {
-      timerRef.current = setInterval(() => {
-        setRun((prev) => ({
-          ...prev,
-          elapsedS: Math.floor(
-            (Date.now() - (prev.startTime || Date.now())) / 1000,
-          ),
-        }));
-      }, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [run.status, run.startTime]);
-
-  // ── Start Run ─────────────────────────────────────────
-
-  const startRun = useCallback(async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert(
-        'Permission Denied',
-        'GPS permission is required to track your run.',
-      );
-      return;
-    }
-
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
-    seqIndexRef.current = 0;
-    lastKmDistRef.current = 0;
-    lastKmTimeRef.current = Date.now();
-
-    setRun({
-      status: 'running',
-      startTime: Date.now(),
-      elapsedS: 0,
-      distanceM: 0,
-      currentPaceSPerKm: 0,
-      avgPaceSPerKm: 0,
-      points: [],
-      validPoints: [],
-      filteredCount: 0,
-      splitPaces: [],
-    });
-
-    // Start GPS tracking at 1Hz (high accuracy)
-    locationSub.current = await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.BestForNavigation,
-        timeInterval: 1000,
-        distanceInterval: 1,
-      },
-      (location) => {
-        const point: GPSPoint = {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          timestamp: location.timestamp,
-          speed: location.coords.speed,
-          accuracy: location.coords.accuracy,
-          seqIndex: seqIndexRef.current++,
-          filtered: false,
-        };
-
-        // GPS Filter
-        const isValid = isValidGPS(point.speed, point.accuracy);
-        point.filtered = !isValid;
-
-        setRun((prev) => {
-          if (prev.status !== 'running') return prev;
-
-          const newPoints = [...prev.points, point];
-
-          if (!isValid) {
-            return {
-              ...prev,
-              points: newPoints,
-              filteredCount: prev.filteredCount + 1,
-            };
-          }
-
-          const newValidPoints = [...prev.validPoints, point];
-          let newDistance = prev.distanceM;
-          let currentPace = prev.currentPaceSPerKm;
-          let splitPaces = [...prev.splitPaces];
-
-          // Calculate distance from last valid point
-          if (newValidPoints.length >= 2) {
-            const prevPoint = newValidPoints[newValidPoints.length - 2];
-            const dist = haversineDistanceM(
-              prevPoint.latitude,
-              prevPoint.longitude,
-              point.latitude,
-              point.longitude,
-            );
-
-            // Reject teleportation (>50m in 1 second)
-            if (dist < 50) {
-              newDistance += dist;
-              const timeDelta =
-                (point.timestamp - prevPoint.timestamp) / 1000;
-              if (dist > 0.5 && timeDelta > 0) {
-                currentPace = calculatePace(dist, timeDelta);
-              }
-            }
-          }
-
-          // Check for km split
-          const kmCovered = Math.floor(newDistance / 1000);
-          if (kmCovered > splitPaces.length) {
-            const splitDist = newDistance - lastKmDistRef.current;
-            const splitTime = (Date.now() - lastKmTimeRef.current) / 1000;
-            const splitPace = calculatePace(splitDist, splitTime);
-            splitPaces.push(splitPace);
-            lastKmDistRef.current = newDistance;
-            lastKmTimeRef.current = Date.now();
-            Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Success,
-            );
-          }
-
-          const elapsed =
-            (Date.now() - (prev.startTime || Date.now())) / 1000;
-          const avgPace = calculatePace(newDistance, elapsed);
-
-          return {
-            ...prev,
-            points: newPoints,
-            validPoints: newValidPoints,
-            distanceM: newDistance,
-            currentPaceSPerKm: currentPace,
-            avgPaceSPerKm: avgPace,
-            splitPaces,
-          };
-        });
-      },
-    );
-  }, []);
-
-  // ── Stop Run ──────────────────────────────────────────
-
-  const stopRun = useCallback(() => {
-    Alert.alert('Finish Run?', 'Are you sure you want to stop?', [
-      { text: 'Keep Running', style: 'cancel' },
-      {
-        text: 'Finish',
-        style: 'destructive',
-        onPress: () => {
-          locationSub.current?.remove();
-          locationSub.current = null;
-          Haptics.notificationAsync(
-            Haptics.NotificationFeedbackType.Warning,
-          );
-          setRun((prev) => ({ ...prev, status: 'finished' }));
-        },
-      },
-    ]);
-  }, []);
-
-  // ── Reset ─────────────────────────────────────────────
-
-  const resetRun = useCallback(() => {
-    locationSub.current?.remove();
-    locationSub.current = null;
-    setRun({
-      status: 'idle',
-      startTime: null,
-      elapsedS: 0,
-      distanceM: 0,
-      currentPaceSPerKm: 0,
-      avgPaceSPerKm: 0,
-      points: [],
-      validPoints: [],
-      filteredCount: 0,
-      splitPaces: [],
-    });
-  }, []);
-
-  // ── Cleanup ───────────────────────────────────────────
-
-  useEffect(() => {
-    return () => {
-      locationSub.current?.remove();
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
-
-  // ── Render ────────────────────────────────────────────
 
   if (run.status === 'idle') {
     return <IdleView onStart={startRun} initialLocation={initialLocation} />;
@@ -361,7 +101,7 @@ function IdleView({
   onStart: () => void;
   initialLocation: { latitude: number; longitude: number } | null;
 }) {
-  const region: Region = initialLocation
+  const region = initialLocation
     ? {
         latitude: initialLocation.latitude,
         longitude: initialLocation.longitude,
@@ -380,30 +120,8 @@ function IdleView({
     <View style={styles.idleContainer}>
       {/* Background Map */}
       <View style={styles.idleMapContainer}>
-        {Platform.OS === 'web' ? (
-          <>
-            <WebMap
-              center={initialLocation || { latitude: 6.8448, longitude: 79.8999 }}
-              height={Dimensions.get('window').height}
-              interactive={false}
-              showRoute={false}
-            />
-            <View style={styles.idleMapOverlay} />
-          </>
-        ) : (
-          <>
-            <MapView
-              style={StyleSheet.absoluteFillObject}
-              initialRegion={region}
-              mapType="standard"
-              showsUserLocation={true}
-              showsMyLocationButton={false}
-              showsCompass={false}
-              customMapStyle={darkMapStyle}
-            />
-            <View style={styles.idleMapOverlay} />
-          </>
-        )}
+        <IdleMap region={region} />
+        <View style={styles.idleMapOverlay} />
       </View>
 
       {/* Content overlay */}
@@ -444,6 +162,19 @@ function IdleView({
 // ═══════════════════════════════════════════════════════════
 // RUNNING VIEW — Live Map + Stats
 // ═══════════════════════════════════════════════════════════
+
+interface RunState {
+  status: 'idle' | 'running' | 'paused' | 'finished';
+  startTime: number | null;
+  elapsedS: number;
+  distanceM: number;
+  currentPaceSPerKm: number;
+  avgPaceSPerKm: number;
+  points: GPSPoint[];
+  validPoints: GPSPoint[];
+  filteredCount: number;
+  splitPaces: number[];
+}
 
 function RunningView({
   run,
@@ -509,20 +240,17 @@ function RunningView({
   // Auto-follow camera
   useEffect(() => {
     if (followCamera && currentPosition && mapRef.current) {
-      mapRef.current.animateToRegion(
-        {
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude,
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        },
-        500,
-      );
+      animateMapToRegion(mapRef, {
+        latitude: currentPosition.latitude,
+        longitude: currentPosition.longitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
+      }, 500);
     }
   }, [currentPosition?.latitude, currentPosition?.longitude, followCamera]);
 
   // Map region for first load
-  const initialRegion: Region = currentPosition
+  const initialRegion = currentPosition
     ? {
         latitude: currentPosition.latitude,
         longitude: currentPosition.longitude,
@@ -540,86 +268,14 @@ function RunningView({
     <View style={styles.runContainer}>
       {/* ── Live Map ────────────────────────────────────── */}
       <View style={styles.mapWrapper}>
-        {Platform.OS === 'web' ? (
-          <WebMap
-            coordinates={routeCoords}
-            currentPosition={currentPosition ? { latitude: currentPosition.latitude, longitude: currentPosition.longitude } : null}
-            ghostPosition={ghostPosition}
-            startPosition={routeCoords.length > 0 ? routeCoords[0] : null}
-            center={currentPosition ? { latitude: currentPosition.latitude, longitude: currentPosition.longitude } : undefined}
-            height={MAP_HEIGHT}
-            interactive={true}
-            showRoute={true}
-          />
-        ) : (
-          <MapView
-            ref={mapRef}
-            style={StyleSheet.absoluteFillObject}
-            initialRegion={initialRegion}
-            mapType="standard"
-            showsUserLocation={false}
-            showsMyLocationButton={false}
-            showsCompass={false}
-            customMapStyle={darkMapStyle}
-            onPanDrag={() => setFollowCamera(false)}
-          >
-            {/* Route polyline */}
-            {routeCoords.length >= 2 && (
-              <Polyline
-                coordinates={routeCoords}
-                strokeColor="#00FF87"
-                strokeWidth={4}
-                lineDashPattern={undefined}
-              />
-            )}
-
-            {/* Start marker */}
-            {routeCoords.length > 0 && (
-              <Marker
-                coordinate={routeCoords[0]}
-                anchor={{ x: 0.5, y: 0.5 }}
-                tracksViewChanges={false}
-              >
-                <View style={styles.startMarker}>
-                  <View style={styles.startMarkerDot} />
-                </View>
-              </Marker>
-            )}
-
-            {/* Ghost runner marker */}
-            {ghostPosition && routeCoords.length >= 2 && (
-              <Marker
-                coordinate={ghostPosition}
-                anchor={{ x: 0.5, y: 0.5 }}
-                tracksViewChanges={false}
-              >
-                <View style={styles.ghostMarker}>
-                  <View style={styles.ghostMarkerInner}>
-                    <View style={styles.ghostEye} />
-                    <View style={styles.ghostEye} />
-                  </View>
-                </View>
-              </Marker>
-            )}
-
-            {/* Runner marker (current position) */}
-            {currentPosition && (
-              <Marker
-                coordinate={{
-                  latitude: currentPosition.latitude,
-                  longitude: currentPosition.longitude,
-                }}
-                anchor={{ x: 0.5, y: 0.5 }}
-                tracksViewChanges={false}
-              >
-                <View style={styles.runnerMarker}>
-                  <View style={styles.runnerMarkerPulse} />
-                  <View style={styles.runnerMarkerDot} />
-                </View>
-              </Marker>
-            )}
-          </MapView>
-        )}
+        <RunningMap
+          mapRef={mapRef}
+          initialRegion={initialRegion}
+          routeCoords={routeCoords}
+          currentPosition={currentPosition}
+          ghostPosition={ghostPosition}
+          onPanDrag={() => setFollowCamera(false)}
+        />
 
         {/* Map overlays */}
         <View style={styles.mapTopOverlay}>
@@ -782,7 +438,7 @@ function FinishedView({
       : 0;
   const riiStatus = getRIIStatus(rii);
 
-  const initialRegion: Region = routeCoords.length > 0
+  const initialRegion = routeCoords.length > 0
     ? {
         latitude: routeCoords[0].latitude,
         longitude: routeCoords[0].longitude,
@@ -805,55 +461,11 @@ function FinishedView({
       {/* Route Map */}
       {routeCoords.length >= 2 && (
         <View style={styles.finishedMapContainer}>
-          {Platform.OS === 'web' ? (
-            <WebMap
-              coordinates={routeCoords}
-              startPosition={routeCoords[0]}
-              finishPosition={routeCoords[routeCoords.length - 1]}
-              height={220}
-              interactive={false}
-              showRoute={true}
-            />
-          ) : (
-            <MapView
-              ref={mapRef}
-              style={StyleSheet.absoluteFillObject}
-              initialRegion={initialRegion}
-              mapType="standard"
-              showsUserLocation={false}
-              customMapStyle={darkMapStyle}
-              scrollEnabled={false}
-              zoomEnabled={false}
-              rotateEnabled={false}
-              pitchEnabled={false}
-            >
-              <Polyline
-                coordinates={routeCoords}
-                strokeColor="#22c55e"
-                strokeWidth={4}
-              />
-              <Marker
-                coordinate={routeCoords[0]}
-                anchor={{ x: 0.5, y: 0.5 }}
-                tracksViewChanges={false}
-              >
-                <View style={styles.startMarker}>
-                  <View style={styles.startMarkerDot} />
-                </View>
-              </Marker>
-              <Marker
-                coordinate={routeCoords[routeCoords.length - 1]}
-                anchor={{ x: 0.5, y: 0.5 }}
-                tracksViewChanges={false}
-              >
-                <View style={styles.finishMarker}>
-                  <View style={styles.finishMarkerDotOuter}>
-                    <View style={styles.finishMarkerDotInner} />
-                  </View>
-                </View>
-              </Marker>
-            </MapView>
-          )}
+          <FinishedMap
+            mapRef={mapRef}
+            initialRegion={initialRegion}
+            routeCoords={routeCoords}
+          />
           <View style={styles.finishedMapBadge}>
             <Text style={styles.finishedMapBadgeText}>RUN COMPLETE</Text>
           </View>

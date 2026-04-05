@@ -1,0 +1,35 @@
+{
+  "model_name": "Ghost-Tracker NPI Regression Model",
+  "version": "1.0.0",
+  "trained_at": "2026-04-05T12:22:30.603026",
+  "n_training_samples": 1200,
+  "n_features": 5,
+  "feature_names": [
+    "age",
+    "bmi",
+    "altitude_m",
+    "distance_m",
+    "gender_female"
+  ],
+  "coefficients": {
+    "intercept": 190.2703,
+    "age": 1.7579,
+    "bmi": 3.3918,
+    "altitude_m": 0.036477,
+    "distance_m": 0.0047,
+    "gender_female": 13.8648
+  },
+  "sigma": 24.158,
+  "model_quality": {
+    "r_squared": 0.7507,
+    "adj_r_squared": 0.7496,
+    "f_statistic": 718.9,
+    "r_squared_test": 0.781
+  },
+  "npi_scale": {
+    "exceptional": 2.0,
+    "above_average": 1.0,
+    "as_expected": 0.0,
+    "below_average": -1.0
+  }
+}

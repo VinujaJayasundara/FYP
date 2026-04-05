@@ -1,0 +1,23 @@
+NPI Training Data Summary
+==================================================
+
+Generated: 2026-04-05T12:22:19.553167
+Total profiles: 200
+Total sessions: 1200
+Sessions per runner: 6
+
+Ground-Truth Coefficients:
+  intercept: 205.0
+  age: 1.85
+  bmi: 3.5
+  altitude_m: 0.038
+  distance_m: 0.005
+  gender_female: 15.0
+  noise_sigma: 12.0
+
+Age range: 18 - 62 (mean: 40.4)
+BMI range: 15.2 - 37.3 (mean: 24.7)
+Altitude range: 3m - 2160m
+Pace range: 259 - 546 s/km
+Gender: 100 Male, 100 Female
+Locations: 10

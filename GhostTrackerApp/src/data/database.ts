@@ -15,8 +15,22 @@ export interface DBSession {
   total_distance_m: number;
   avg_pace_s_per_km: number | null;
   rii_score: number | null;
+  npi_score: number | null;
   is_pb: number; // 0 or 1
   route_id: string;
+  created_at: number;
+}
+
+export interface DBUserProfile {
+  id: string;
+  age: number;
+  weight_kg: number;
+  height_cm: number;
+  bmi: number;
+  gender: 'M' | 'F';
+  calibration_runs: number;
+  baseline_pace: number | null;
+  is_calibrated: number; // 0 or 1
   created_at: number;
 }
 
@@ -78,8 +92,22 @@ export async function initDatabase(): Promise<void> {
       total_distance_m REAL DEFAULT 0,
       avg_pace_s_per_km REAL,
       rii_score REAL,
+      npi_score REAL,
       is_pb INTEGER DEFAULT 0,
       route_id TEXT NOT NULL,
+      created_at INTEGER NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS user_profile (
+      id TEXT PRIMARY KEY,
+      age INTEGER NOT NULL,
+      weight_kg REAL NOT NULL,
+      height_cm REAL NOT NULL,
+      bmi REAL NOT NULL,
+      gender TEXT NOT NULL DEFAULT 'M',
+      calibration_runs INTEGER DEFAULT 0,
+      baseline_pace REAL,
+      is_calibrated INTEGER DEFAULT 0,
       created_at INTEGER NOT NULL
     );
 
@@ -162,11 +190,12 @@ export async function finalizeSession(
   distanceM: number,
   avgPace: number | null,
   riiScore: number | null,
+  npiScore: number | null = null,
 ): Promise<void> {
   await getDb().runAsync(
-    `UPDATE run_sessions SET ended_at = ?, total_distance_m = ?, avg_pace_s_per_km = ?, rii_score = ?
+    `UPDATE run_sessions SET ended_at = ?, total_distance_m = ?, avg_pace_s_per_km = ?, rii_score = ?, npi_score = ?
      WHERE id = ?`,
-    [Date.now(), distanceM, avgPace, riiScore, sessionId],
+    [Date.now(), distanceM, avgPace, riiScore, npiScore, sessionId],
   );
 }
 
@@ -336,6 +365,44 @@ export async function getOrCreateDeviceProfile(alias: string = 'Runner'): Promis
     [deviceId, alias, Date.now()],
   );
   return { deviceId, userAlias: alias };
+}
+
+// ── User Profile Repository ───────────────────────────────
+
+export async function saveUserProfile(
+  age: number,
+  weightKg: number,
+  heightCm: number,
+  gender: 'M' | 'F',
+): Promise<string> {
+  const id = generateId();
+  const bmi = Math.round((weightKg / ((heightCm / 100) ** 2)) * 10) / 10;
+  const now = Date.now();
+
+  // Clear existing profiles (single-user app)
+  await getDb().runAsync(`DELETE FROM user_profile`);
+
+  await getDb().runAsync(
+    `INSERT INTO user_profile (id, age, weight_kg, height_cm, bmi, gender, calibration_runs, baseline_pace, is_calibrated, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, 0, NULL, 0, ?)`,
+    [id, age, weightKg, heightCm, bmi, gender, now],
+  );
+  return id;
+}
+
+export async function getUserProfile(): Promise<DBUserProfile | null> {
+  const row = await getDb().getFirstAsync<DBUserProfile>(
+    `SELECT * FROM user_profile LIMIT 1`,
+  );
+  return row || null;
+}
+
+export async function updateCalibration(profileId: string, runs: number, baselinePace: number | null): Promise<void> {
+  const calibrated = runs >= 5 && baselinePace !== null ? 1 : 0;
+  await getDb().runAsync(
+    `UPDATE user_profile SET calibration_runs = ?, baseline_pace = ?, is_calibrated = ? WHERE id = ?`,
+    [runs, baselinePace, calibrated, profileId],
+  );
 }
 
 // ── Stats ─────────────────────────────────────────────────

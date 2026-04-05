@@ -1,0 +1,8 @@
+name,age,bmi,gender,altitude_m,actual_pace,expected_pace,npi,status
+Malith,25,20.0,M,510,288,329.1,1.702,Above Average
+Kasun,35,24.0,M,510,320,360.3,1.667,Above Average
+Tharindu,28,22.0,M,15,300,326.4,1.093,Above Average
+Kavisha,45,28.0,F,1868,450,460.5,0.433,As Expected
+Vinuja,22,21.5,M,15,330,314.2,-0.655,Below Average
+Supun,30,26.0,M,15,360,343.5,-0.683,Below Average
+Sachini,27,22.5,F,15,370,340.2,-1.233,Needs Work

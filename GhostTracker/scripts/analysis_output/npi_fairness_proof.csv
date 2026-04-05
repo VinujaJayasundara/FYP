@@ -1,0 +1,7 @@
+profile,age,bmi,gender,altitude_m,expected_pace,actual_pace,npi
+"Young Male, Low BMI, Sea Level",22,20.5,M,15,310.8,279.7,1.286
+"Middle-Age Male, Avg BMI, Mid Alt",40,25.0,M,510,375.7,338.2,1.555
+"Older Male, High BMI, High Alt",55,29.0,M,1868,465.2,418.7,1.926
+"Young Female, Low BMI, Sea Level",24,21.0,F,8,329.6,296.6,1.364
+"Middle-Age Female, Avg BMI, High Alt",42,26.0,F,1041,415.9,374.3,1.721
+"Older Female, High BMI, Sea Level",58,30.0,F,3,419.7,377.7,1.737
