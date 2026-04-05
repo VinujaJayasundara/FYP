@@ -1,0 +1,130 @@
+﻿===========================================================================
+  MULTI-SESSION IMPROVEMENT DATA MODELING
+  Tracking PB updates and RII trends across 6 sessions per runner
+===========================================================================
+
+  Runner: Vinuja (Bellanwila Park, 2500m route)
+  Sess #       Pace  PB Pace      RII   PB?               Status  Improvement
+  -------- -------- -------- -------- ----- -------------------- ------------
+  Run 1        6:30     6:30    1.000   NEW              On Pace       +0.0%
+  Run 2        6:15     6:15    1.000   NEW              On Pace       +3.8%
+  Run 3        6:05     6:05    1.000   NEW              On Pace       +6.4%
+  Run 4        5:55     5:55    1.000   NEW              On Pace       +9.0%
+  Run 5        5:40     5:40    1.000   NEW              On Pace      +12.8%
+  Run 6        5:30     5:30    1.000   NEW              On Pace      +15.4%
+  --> Total improvement: +15.4% over 6 sessions
+
+  Runner: Tharindu (Bellanwila Park, 2500m route)
+  Sess #       Pace  PB Pace      RII   PB?               Status  Improvement
+  -------- -------- -------- -------- ----- -------------------- ------------
+  Run 1        5:30     5:30    1.000   NEW              On Pace       +0.0%
+  Run 2        5:25     5:25    1.000   NEW              On Pace       +1.5%
+  Run 3        5:20     5:20    1.000   NEW              On Pace       +3.0%
+  Run 4        5:10     5:10    1.000   NEW              On Pace       +6.1%
+  Run 5        5:05     5:05    1.000   NEW              On Pace       +7.6%
+  Run 6        5:00     5:00    1.000   NEW              On Pace       +9.1%
+  --> Total improvement: +9.1% over 6 sessions
+
+  Runner: Supun (Bellanwila Park, 2500m route)
+  Sess #       Pace  PB Pace      RII   PB?               Status  Improvement
+  -------- -------- -------- -------- ----- -------------------- ------------
+  Run 1        7:00     7:00    1.000   NEW              On Pace       +0.0%
+  Run 2        6:45     6:45    1.000   NEW              On Pace       +3.6%
+  Run 3        6:35     6:35    1.000   NEW              On Pace       +6.0%
+  Run 4        6:20     6:20    1.000   NEW              On Pace       +9.5%
+  Run 5        6:15     6:15    1.000   NEW              On Pace      +10.7%
+  Run 6        6:00     6:00    1.000   NEW              On Pace      +14.3%
+  --> Total improvement: +14.3% over 6 sessions
+
+  Runner: Kasun (KDU Clubhouse, 1800m route)
+  Sess #       Pace  PB Pace      RII   PB?               Status  Improvement
+  -------- -------- -------- -------- ----- -------------------- ------------
+  Run 1        6:00     6:00    1.000   NEW              On Pace       +0.0%
+  Run 2        5:50     5:50    1.000   NEW              On Pace       +2.8%
+  Run 3        5:40     5:40    1.000   NEW              On Pace       +5.6%
+  Run 4        5:35     5:35    1.000   NEW              On Pace       +6.9%
+  Run 5        5:25     5:25    1.000   NEW              On Pace       +9.7%
+  Run 6        5:20     5:20    1.000   NEW              On Pace      +11.1%
+  --> Total improvement: +11.1% over 6 sessions
+
+  Runner: Malith (KDU Clubhouse, 1800m route)
+  Sess #       Pace  PB Pace      RII   PB?               Status  Improvement
+  -------- -------- -------- -------- ----- -------------------- ------------
+  Run 1        5:00     5:00    1.000   NEW              On Pace       +0.0%
+  Run 2        4:58     4:58    1.000   NEW              On Pace       +0.7%
+  Run 3        4:55     4:55    1.000   NEW              On Pace       +1.7%
+  Run 4        4:52     4:52    1.000   NEW              On Pace       +2.7%
+  Run 5        4:50     4:50    1.000   NEW              On Pace       +3.3%
+  Run 6        4:48     4:48    1.000   NEW              On Pace       +4.0%
+  --> Total improvement: +4.0% over 6 sessions
+
+===========================================================================
+  CROSS-LOCATION LEADERBOARD (Ranked by Total Improvement)
+  Bellanwila Park vs KDU Clubhouse
+===========================================================================
+
+  Rank   Runner       Location             Route    Start      Now   Improved  RII vs Day1
+  ------ ------------ ------------------ ------- -------- -------- ---------- ------------
+  #1     Vinuja       Bellanwila Park      2500m     6:30     5:30     +15.4%        1.182
+  #2     Supun        Bellanwila Park      2500m     7:00     6:00     +14.3%        1.167
+  #3     Kasun        KDU Clubhouse        1800m     6:00     5:20     +11.1%        1.125
+  #4     Tharindu     Bellanwila Park      2500m     5:30     5:00      +9.1%        1.100
+  #5     Malith       KDU Clubhouse        1800m     5:00     4:48      +4.0%        1.042
+
+  KEY INSIGHTS:
+  - Rankings are by IMPROVEMENT PERCENTAGE, not absolute speed
+  - Vinuja improved the most (+15.4%) despite potentially being slower
+  - Malith improved the least (+4.0%) — possibly already elite
+  - Route distance does NOT affect rankings (Bellanwila 2500m vs KDU 1800m)
+
+===========================================================================
+  GHOST RACE SIMULATION
+  Vinuja Session 6 (latest) vs Ghost (Session 1 PB)
+===========================================================================
+
+  Ghost (Session 1): 6:30 /km  -->  Finishes in 16:14
+  Live  (Session 6): 5:30 /km  -->  Finishes in 13:45
+  Route: 2500m at Bellanwila Park
+
+      Time   Ghost Dist    Live Dist   Lead/Lag      RII           Status
+  -------- ------------ ------------ ---------- -------- ----------------
+      0:00          0m          0m        +0m    1.182            AHEAD
+      1:04        164m        194m       +30m    1.182            AHEAD
+      2:08        328m        388m       +60m    1.182            AHEAD
+      3:12        492m        582m       +90m    1.182            AHEAD
+      4:16        656m        776m      +119m    1.182            AHEAD
+      5:20        821m        970m      +149m    1.182            AHEAD
+      6:24        985m       1164m      +179m    1.182            AHEAD
+      7:28       1149m       1358m      +209m    1.182            AHEAD
+      8:32       1313m       1552m      +239m    1.182            AHEAD
+      9:36       1477m       1745m      +269m    1.182            AHEAD
+     10:40       1641m       1939m      +298m    1.182            AHEAD
+     11:44       1805m       2133m      +328m    1.182            AHEAD
+     12:48       1969m       2327m      +358m    1.182            AHEAD
+     13:52       2133m       2500m      +367m    1.172            AHEAD
+     14:56       2297m       2500m      +203m    1.088            AHEAD
+     16:00       2462m       2500m       +38m    1.016          ON PACE
+
+  RESULT: Vinuja finished 149s faster than Ghost!
+  FINAL RII: 1.182 (18.2% improvement since Session 1)
+
+===========================================================================
+  FAIRNESS PROOF (Mathematical Verification)
+===========================================================================
+
+  Test: 5% improvement across ALL ability levels
+
+  Level              PB Pace    Current        RII    Fair?
+  --------------- ---------- ---------- ---------- --------
+  Beginner              7:00       6:39     1.0526      YES
+  Intermediate          5:30       5:13     1.0526      YES
+  Advanced              4:30       4:16     1.0526      YES
+  Elite                 3:30       3:19     1.0526      YES
+
+  ALL RII = 1.0526
+  VERDICT: FAIRNESS PROVEN - Same improvement always produces same RII
+
+  Files saved to: D:\anti\FYP\GhostTracker\scripts\analysis_output
+===========================================================================
+  DATA MODELING COMPLETE
+===========================================================================

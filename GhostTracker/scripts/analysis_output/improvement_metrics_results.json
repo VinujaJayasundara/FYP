@@ -1,0 +1,347 @@
+{
+  "generated_at": "2026-04-04T09:23:37.952169",
+  "input_data": {
+    "total_points": 1454,
+    "total_sessions": 5,
+    "processed_sessions": 5
+  },
+  "personal_bests": [
+    {
+      "runner": "Kamal",
+      "total_sessions": 1,
+      "pb_pace": 232.03321723465947,
+      "pb_distance": 1146.3875869591088,
+      "pb_time": 266.0,
+      "pb_session_id": "b62db600-d1e1-4163-a1c8-5ff05234dec5"
+    },
+    {
+      "runner": "Nuwan",
+      "total_sessions": 1,
+      "pb_pace": 244.20897986525387,
+      "pb_distance": 1207.9817874132675,
+      "pb_time": 295.0,
+      "pb_session_id": "0ddbca12-1335-47f5-bb67-8c6f04ee3be7"
+    },
+    {
+      "runner": "Dilshan",
+      "total_sessions": 1,
+      "pb_pace": 259.2440366449891,
+      "pb_distance": 1203.4992358464754,
+      "pb_time": 312.0,
+      "pb_session_id": "88c2fbe8-69d6-4bca-b81b-3e678642f9fd"
+    },
+    {
+      "runner": "Tharindu",
+      "total_sessions": 1,
+      "pb_pace": 217.40997213038924,
+      "pb_distance": 1048.7099453895312,
+      "pb_time": 228.0,
+      "pb_session_id": "a3ba7eb2-8367-4cbf-aaa6-6f8b80e967f5"
+    },
+    {
+      "runner": "Supun",
+      "total_sessions": 1,
+      "pb_pace": 260.5472939925523,
+      "pb_distance": 1335.650026017724,
+      "pb_time": 348.0,
+      "pb_session_id": "a4e02c0c-b13e-4459-8e89-f2db34aa13ae"
+    }
+  ],
+  "rii_improvement": [
+    {
+      "runner": "Kamal",
+      "session_num": 1,
+      "pace": 232.03321723465947,
+      "rii": 1.0,
+      "status": "\u2705 On Pace",
+      "distance": 1146.3875869591088,
+      "is_pb": true
+    },
+    {
+      "runner": "Nuwan",
+      "session_num": 1,
+      "pace": 244.20897986525387,
+      "rii": 1.0,
+      "status": "\u2705 On Pace",
+      "distance": 1207.9817874132675,
+      "is_pb": true
+    },
+    {
+      "runner": "Dilshan",
+      "session_num": 1,
+      "pace": 259.2440366449891,
+      "rii": 1.0,
+      "status": "\u2705 On Pace",
+      "distance": 1203.4992358464754,
+      "is_pb": true
+    },
+    {
+      "runner": "Tharindu",
+      "session_num": 1,
+      "pace": 217.40997213038924,
+      "rii": 1.0,
+      "status": "\u2705 On Pace",
+      "distance": 1048.7099453895312,
+      "is_pb": true
+    },
+    {
+      "runner": "Supun",
+      "session_num": 1,
+      "pace": 260.5472939925523,
+      "rii": 1.0,
+      "status": "\u2705 On Pace",
+      "distance": 1335.650026017724,
+      "is_pb": true
+    }
+  ],
+  "cross_location_comparison": [
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist": 1800,
+      "pb_pace": 340,
+      "current_pace": 310,
+      "rii": 1.096774193548387
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist": 1800,
+      "pb_pace": 380,
+      "current_pace": 360,
+      "rii": 1.0555555555555556
+    },
+    {
+      "runner": "Kamal",
+      "location": "Bellanwila Park",
+      "route_dist": 1146.3875869591088,
+      "pb_pace": 232.03321723465947,
+      "current_pace": 220.43155637292648,
+      "rii": 1.0526315789473686
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist": 1048.7099453895312,
+      "pb_pace": 217.40997213038924,
+      "current_pace": 206.53947352386976,
+      "rii": 1.0526315789473686
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist": 1335.650026017724,
+      "pb_pace": 260.5472939925523,
+      "current_pace": 247.51992929292464,
+      "rii": 1.0526315789473686
+    },
+    {
+      "runner": "Nuwan",
+      "location": "Bellanwila Park",
+      "route_dist": 1207.9817874132675,
+      "pb_pace": 244.20897986525387,
+      "current_pace": 231.99853087199116,
+      "rii": 1.0526315789473684
+    },
+    {
+      "runner": "Dilshan",
+      "location": "Bellanwila Park",
+      "route_dist": 1203.4992358464754,
+      "pb_pace": 259.2440366449891,
+      "current_pace": 246.28183481273962,
+      "rii": 1.0526315789473684
+    }
+  ],
+  "ghost_comparison_sample": [
+    {
+      "elapsed_s": 0,
+      "ghost_pace": 164.04448332507522,
+      "live_pace": 164.04448332507522,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 8,
+      "ghost_pace": 172.8110471107812,
+      "live_pace": 172.8110471107812,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 16,
+      "ghost_pace": 298.01064117913194,
+      "live_pace": 298.01064117913194,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 24,
+      "ghost_pace": 296.63203450217657,
+      "live_pace": 296.63203450217657,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 32,
+      "ghost_pace": 286.41645922913665,
+      "live_pace": 286.41645922913665,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 40,
+      "ghost_pace": 158.18594441154812,
+      "live_pace": 158.18594441154812,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 48,
+      "ghost_pace": 1346.4309142275497,
+      "live_pace": 1346.4309142275497,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 56,
+      "ghost_pace": 313.9651827325891,
+      "live_pace": 313.9651827325891,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 64,
+      "ghost_pace": 213.83930003245987,
+      "live_pace": 213.83930003245987,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 72,
+      "ghost_pace": 177.28276968889713,
+      "live_pace": 177.28276968889713,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 80,
+      "ghost_pace": 160.82650638811927,
+      "live_pace": 160.82650638811927,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 88,
+      "ghost_pace": 378.66260200459396,
+      "live_pace": 378.66260200459396,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 96,
+      "ghost_pace": 201.9275749514358,
+      "live_pace": 201.9275749514358,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 104,
+      "ghost_pace": 173.58574487903488,
+      "live_pace": 173.58574487903488,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 112,
+      "ghost_pace": 235.23368981524848,
+      "live_pace": 235.23368981524848,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 120,
+      "ghost_pace": 300.3858937322184,
+      "live_pace": 300.3858937322184,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 128,
+      "ghost_pace": 249.28885109825262,
+      "live_pace": 249.28885109825262,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 136,
+      "ghost_pace": 204.69962560628636,
+      "live_pace": 204.69962560628636,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 144,
+      "ghost_pace": 321.87281233650936,
+      "live_pace": 321.87281233650936,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    },
+    {
+      "elapsed_s": 152,
+      "ghost_pace": 383.52563794637445,
+      "live_pace": 383.52563794637445,
+      "rii": 1.0,
+      "lead_lag_m": 0.0,
+      "status": "\u2705 On Pace"
+    }
+  ],
+  "fairness_proof": [
+    {
+      "label": "Beginner A",
+      "rii": 1.1111111111111112,
+      "improve": 9.999999999999998,
+      "pb": 420,
+      "current": 378
+    },
+    {
+      "label": "Advanced D",
+      "rii": 1.1111111111111112,
+      "improve": 9.999999999999998,
+      "pb": 270,
+      "current": 243
+    },
+    {
+      "label": "Elite B",
+      "rii": 1.05,
+      "improve": 4.761904761904767,
+      "pb": 210,
+      "current": 200
+    },
+    {
+      "label": "Beginner C",
+      "rii": 1.0263157894736843,
+      "improve": 2.564102564102566,
+      "pb": 390,
+      "current": 380
+    }
+  ]
+}

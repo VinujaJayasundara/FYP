@@ -1,0 +1,552 @@
+{
+  "generated_at": "2026-04-04T09:29:35.588597",
+  "multi_session_rii": [
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 1,
+      "pace_s_per_km": 390,
+      "pb_pace_s_per_km": 390,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.0
+    },
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 2,
+      "pace_s_per_km": 375,
+      "pb_pace_s_per_km": 375,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 3.8
+    },
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 3,
+      "pace_s_per_km": 365,
+      "pb_pace_s_per_km": 365,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 6.4
+    },
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 4,
+      "pace_s_per_km": 355,
+      "pb_pace_s_per_km": 355,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 9.0
+    },
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 5,
+      "pace_s_per_km": 340,
+      "pb_pace_s_per_km": 340,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 12.8
+    },
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 6,
+      "pace_s_per_km": 330,
+      "pb_pace_s_per_km": 330,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 15.4
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 1,
+      "pace_s_per_km": 330,
+      "pb_pace_s_per_km": 330,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.0
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 2,
+      "pace_s_per_km": 325,
+      "pb_pace_s_per_km": 325,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 1.5
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 3,
+      "pace_s_per_km": 320,
+      "pb_pace_s_per_km": 320,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 3.0
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 4,
+      "pace_s_per_km": 310,
+      "pb_pace_s_per_km": 310,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 6.1
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 5,
+      "pace_s_per_km": 305,
+      "pb_pace_s_per_km": 305,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 7.6
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 6,
+      "pace_s_per_km": 300,
+      "pb_pace_s_per_km": 300,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 9.1
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 1,
+      "pace_s_per_km": 420,
+      "pb_pace_s_per_km": 420,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.0
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 2,
+      "pace_s_per_km": 405,
+      "pb_pace_s_per_km": 405,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 3.6
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 3,
+      "pace_s_per_km": 395,
+      "pb_pace_s_per_km": 395,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 6.0
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 4,
+      "pace_s_per_km": 380,
+      "pb_pace_s_per_km": 380,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 9.5
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 5,
+      "pace_s_per_km": 375,
+      "pb_pace_s_per_km": 375,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 10.7
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "session": 6,
+      "pace_s_per_km": 360,
+      "pb_pace_s_per_km": 360,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 14.3
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 1,
+      "pace_s_per_km": 360,
+      "pb_pace_s_per_km": 360,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.0
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 2,
+      "pace_s_per_km": 350,
+      "pb_pace_s_per_km": 350,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 2.8
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 3,
+      "pace_s_per_km": 340,
+      "pb_pace_s_per_km": 340,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 5.6
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 4,
+      "pace_s_per_km": 335,
+      "pb_pace_s_per_km": 335,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 6.9
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 5,
+      "pace_s_per_km": 325,
+      "pb_pace_s_per_km": 325,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 9.7
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 6,
+      "pace_s_per_km": 320,
+      "pb_pace_s_per_km": 320,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 11.1
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 1,
+      "pace_s_per_km": 300,
+      "pb_pace_s_per_km": 300,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.0
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 2,
+      "pace_s_per_km": 298,
+      "pb_pace_s_per_km": 298,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 0.7
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 3,
+      "pace_s_per_km": 295,
+      "pb_pace_s_per_km": 295,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 1.7
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 4,
+      "pace_s_per_km": 292,
+      "pb_pace_s_per_km": 292,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 2.7
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 5,
+      "pace_s_per_km": 290,
+      "pb_pace_s_per_km": 290,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 3.3
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "session": 6,
+      "pace_s_per_km": 288,
+      "pb_pace_s_per_km": 288,
+      "rii": 1.0,
+      "is_pb": true,
+      "status": "On Pace",
+      "improvement_pct": 4.0
+    }
+  ],
+  "runner_summaries": [
+    {
+      "runner": "Vinuja",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "first_pace": 390,
+      "latest_pace": 330,
+      "best_pace": 330,
+      "total_improvement_pct": 15.4,
+      "final_rii_vs_first": 1.1818,
+      "total_sessions": 6
+    },
+    {
+      "runner": "Supun",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "first_pace": 420,
+      "latest_pace": 360,
+      "best_pace": 360,
+      "total_improvement_pct": 14.3,
+      "final_rii_vs_first": 1.1667,
+      "total_sessions": 6
+    },
+    {
+      "runner": "Kasun",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "first_pace": 360,
+      "latest_pace": 320,
+      "best_pace": 320,
+      "total_improvement_pct": 11.1,
+      "final_rii_vs_first": 1.125,
+      "total_sessions": 6
+    },
+    {
+      "runner": "Tharindu",
+      "location": "Bellanwila Park",
+      "route_dist_m": 2500,
+      "first_pace": 330,
+      "latest_pace": 300,
+      "best_pace": 300,
+      "total_improvement_pct": 9.1,
+      "final_rii_vs_first": 1.1,
+      "total_sessions": 6
+    },
+    {
+      "runner": "Malith",
+      "location": "KDU Clubhouse",
+      "route_dist_m": 1800,
+      "first_pace": 300,
+      "latest_pace": 288,
+      "best_pace": 288,
+      "total_improvement_pct": 4.0,
+      "final_rii_vs_first": 1.0417,
+      "total_sessions": 6
+    }
+  ],
+  "ghost_comparison": [
+    {
+      "elapsed_s": 0,
+      "ghost_dist_m": 0.0,
+      "live_dist_m": 0.0,
+      "lead_lag_m": 0.0,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 64,
+      "ghost_dist_m": 164.1,
+      "live_dist_m": 193.9,
+      "lead_lag_m": 29.8,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 128,
+      "ghost_dist_m": 328.2,
+      "live_dist_m": 387.9,
+      "lead_lag_m": 59.7,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 192,
+      "ghost_dist_m": 492.3,
+      "live_dist_m": 581.8,
+      "lead_lag_m": 89.5,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 256,
+      "ghost_dist_m": 656.4,
+      "live_dist_m": 775.8,
+      "lead_lag_m": 119.3,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 320,
+      "ghost_dist_m": 820.5,
+      "live_dist_m": 969.7,
+      "lead_lag_m": 149.2,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 384,
+      "ghost_dist_m": 984.6,
+      "live_dist_m": 1163.6,
+      "lead_lag_m": 179.0,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 448,
+      "ghost_dist_m": 1148.7,
+      "live_dist_m": 1357.6,
+      "lead_lag_m": 208.9,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 512,
+      "ghost_dist_m": 1312.8,
+      "live_dist_m": 1551.5,
+      "lead_lag_m": 238.7,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 576,
+      "ghost_dist_m": 1476.9,
+      "live_dist_m": 1745.5,
+      "lead_lag_m": 268.5,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 640,
+      "ghost_dist_m": 1641.0,
+      "live_dist_m": 1939.4,
+      "lead_lag_m": 298.4,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 704,
+      "ghost_dist_m": 1805.1,
+      "live_dist_m": 2133.3,
+      "lead_lag_m": 328.2,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 768,
+      "ghost_dist_m": 1969.2,
+      "live_dist_m": 2327.3,
+      "lead_lag_m": 358.0,
+      "rii": 1.1818,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 832,
+      "ghost_dist_m": 2133.3,
+      "live_dist_m": 2500,
+      "lead_lag_m": 366.7,
+      "rii": 1.1719,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 896,
+      "ghost_dist_m": 2297.4,
+      "live_dist_m": 2500,
+      "lead_lag_m": 202.6,
+      "rii": 1.0882,
+      "status": "AHEAD"
+    },
+    {
+      "elapsed_s": 960,
+      "ghost_dist_m": 2461.5,
+      "live_dist_m": 2500,
+      "lead_lag_m": 38.5,
+      "rii": 1.0156,
+      "status": "ON PACE"
+    }
+  ]
+}

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost-Tracker | PEC Framework Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- HEADER                                                      -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">👻</span>
+        <div>
+          <h1 class="logo-title">Ghost-Tracker</h1>
+          <p class="logo-subtitle">P2P Edge-Consensus Framework</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill status-live">
+        <span class="pulse-dot"></span>
+        Phase 1-3 Complete
+      </div>
+      <div class="header-meta">
+        <span>75/75 Tests Passing</span>
+        <span class="divider">|</span>
+        <span>1,454 GPS Points</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- NAV TABS                                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <nav class="nav-tabs">
+    <button class="tab active" data-tab="overview" id="tab-overview">
+      <span class="tab-icon">📊</span> Overview
+    </button>
+    <button class="tab" data-tab="gps" id="tab-gps">
+      <span class="tab-icon">🗺️</span> GPS & Map
+    </button>
+    <button class="tab" data-tab="rii" id="tab-rii">
+      <span class="tab-icon">⚡</span> RII Engine
+    </button>
+    <button class="tab" data-tab="crdt" id="tab-crdt">
+      <span class="tab-icon">🔄</span> CRDT Sync
+    </button>
+    <button class="tab" data-tab="filter" id="tab-filter">
+      <span class="tab-icon">🛡️</span> GPS Filter
+    </button>
+    <button class="tab" data-tab="arch" id="tab-arch">
+      <span class="tab-icon">🏗️</span> Architecture
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB CONTENT                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- ── OVERVIEW TAB ──────────────────────────────────────── -->
+    <section class="tab-content active" id="content-overview">
+      <div class="section-header">
+        <h2>Project Overview</h2>
+        <p class="section-desc">Ghost-Tracker solves the Privacy-Connectivity-Fairness trilemma in fitness tracking</p>
+      </div>
+
+      <!-- Problem Cards -->
+      <div class="trilemma-grid">
+        <div class="trilemma-card trilemma-privacy">
+          <div class="trilemma-icon">🔒</div>
+          <h3>Privacy</h3>
+          <p class="trilemma-problem">Traditional apps upload GPS data to cloud servers</p>
+          <div class="trilemma-arrow">↓</div>
+          <p class="trilemma-solution">All data stays encrypted on-device (SQLite)</p>
+        </div>
+        <div class="trilemma-card trilemma-connectivity">
+          <div class="trilemma-icon">📡</div>
+          <h3>Connectivity</h3>
+          <p class="trilemma-problem">Features fail without internet access</p>
+          <div class="trilemma-arrow">↓</div>
+          <p class="trilemma-solution">100% offline via BLE P2P sync</p>
+        </div>
+        <div class="trilemma-card trilemma-fairness">
+          <div class="trilemma-icon">⚖️</div>
+          <h3>Fairness</h3>
+          <p class="trilemma-problem">Leaderboards rank by absolute speed only</p>
+          <div class="trilemma-arrow">↓</div>
+          <p class="trilemma-solution">RII normalizes against personal baseline</p>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-tests">75</div>
+          <div class="stat-label">Unit Tests Passing</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-points">1,454</div>
+          <div class="stat-label">GPS Points Generated</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-convergence">100%</div>
+          <div class="stat-label">CRDT Convergence Rate</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">6</div>
+          <div class="stat-label">SQLite Tables</div>
+          <div class="stat-bar"><div class="stat-bar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="comparison-section">
+        <h3 class="comparison-title">Traditional vs Ghost-Tracker</h3>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="col-trad">Traditional Cloud Apps</th>
+              <th class="col-ghost">Ghost-Tracker (PEC)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Data Storage</td>
+              <td class="col-trad">Cloud Database (AWS/Firebase)</td>
+              <td class="col-ghost">✅ Local-First (Encrypted SQLite)</td>
+            </tr>
+            <tr>
+              <td>Connectivity</td>
+              <td class="col-trad">Requires Wi-Fi/4G</td>
+              <td class="col-ghost">✅ Zero-Connectivity (Offline)</td>
+            </tr>
+            <tr>
+              <td>Sync Protocol</td>
+              <td class="col-trad">REST APIs to Server</td>
+              <td class="col-ghost">✅ P2P Bluetooth Low Energy</td>
+            </tr>
+            <tr>
+              <td>Competitive Metric</td>
+              <td class="col-trad">Absolute Speed</td>
+              <td class="col-ghost">✅ Relative Improvement (RII)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── GPS & MAP TAB ─────────────────────────────────────── -->
+    <section class="tab-content" id="content-gps">
+      <div class="section-header">
+        <h2>GPS Telemetry — Bellanwila Park</h2>
+        <p class="section-desc">1Hz GPS coordinate recording with synthetic test data (1,454 points across 5 sessions)</p>
+      </div>
+      <div class="map-layout">
+        <div class="map-container">
+          <div id="map" style="width:100%; height:100%; border-radius:12px;"></div>
+        </div>
+        <div class="map-sidebar">
+          <h3>Runner Sessions</h3>
+          <div class="runner-list" id="runner-list">
+            <!-- Populated by JS -->
+          </div>
+          <div class="map-legend">
+            <h4>Route Info</h4>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#22c55e"></span>
+              <span>Start Point</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#ef4444"></span>
+              <span>Finish Point</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#f59e0b"></span>
+              <span>GPS Spike (Filtered)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RII ENGINE TAB ────────────────────────────────────── -->
+    <section class="tab-content" id="content-rii">
+      <div class="section-header">
+        <h2>Relative Improvement Index (RII) Engine</h2>
+        <p class="section-desc">RII = PB_pace / Current_pace — Normalizes competition against personal baseline</p>
+      </div>
+
+      <div class="rii-layout">
+        <div class="rii-simulator">
+          <h3>🎮 Live RII Simulator</h3>
+          <div class="rii-controls">
+            <div class="rii-input-group">
+              <label>Ghost PB Pace (min/km)</label>
+              <input type="range" id="pb-pace" min="180" max="480" value="330" step="5">
+              <span class="rii-val" id="pb-pace-val">5:30</span>
+            </div>
+            <div class="rii-input-group">
+              <label>Current Pace (min/km)</label>
+              <input type="range" id="current-pace" min="180" max="480" value="300" step="5">
+              <span class="rii-val" id="current-pace-val">5:00</span>
+            </div>
+          </div>
+
+          <div class="rii-display">
+            <div class="rii-gauge-container">
+              <svg viewBox="0 0 200 120" class="rii-gauge">
+                <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1e293b" stroke-width="12" stroke-linecap="round"/>
+                <path id="rii-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="125"/>
+                <text id="rii-value" x="100" y="88" text-anchor="middle" class="rii-gauge-text">1.10</text>
+                <text id="rii-label" x="100" y="105" text-anchor="middle" class="rii-gauge-label">Crushing It!</text>
+              </svg>
+            </div>
+            <div class="rii-status-card" id="rii-status-card">
+              <div class="rii-emoji" id="rii-emoji">🔥</div>
+              <div class="rii-status-text" id="rii-status-text">Outperforming Ghost</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rii-fairness">
+          <h3>⚖️ Fairness Proof</h3>
+          <p class="fairness-desc">Same % improvement = same RII, regardless of ability level</p>
+          <div class="fairness-grid">
+            <div class="fairness-card">
+              <div class="fairness-runner">🏃 Beginner</div>
+              <div class="fairness-detail">PB: 7:00 → Now: 6:22</div>
+              <div class="fairness-improve">10% faster</div>
+              <div class="fairness-rii" id="beginner-rii">RII: 1.10</div>
+            </div>
+            <div class="fairness-equals">=</div>
+            <div class="fairness-card">
+              <div class="fairness-runner">🏃‍♂️ Elite</div>
+              <div class="fairness-detail">PB: 3:30 → Now: 3:11</div>
+              <div class="fairness-improve">10% faster</div>
+              <div class="fairness-rii" id="elite-rii">RII: 1.10</div>
+            </div>
+          </div>
+          <div class="fairness-formula">
+            <code>RII = PB_pace / Current_pace</code>
+            <span class="formula-note">If RII > 1.0, user outperforms their Ghost</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CRDT SYNC TAB ─────────────────────────────────────── -->
+    <section class="tab-content" id="content-crdt">
+      <div class="section-header">
+        <h2>CRDT Consensus Simulation</h2>
+        <p class="section-desc">G-Counter merge guarantees Strong Eventual Consistency — merge(A,B) = merge(B,A)</p>
+      </div>
+
+      <div class="crdt-layout">
+        <div class="crdt-demo">
+          <div class="crdt-nodes">
+            <div class="crdt-node" id="node-a">
+              <div class="crdt-node-header">
+                <span class="crdt-node-icon">📱</span>
+                <span>Device A</span>
+              </div>
+              <div class="crdt-state" id="state-a">
+                <div class="crdt-entry"><span class="crdt-key">A:</span> <span class="crdt-val" id="val-a-a">0</span></div>
+                <div class="crdt-entry"><span class="crdt-key">B:</span> <span class="crdt-val" id="val-a-b">0</span></div>
+              </div>
+              <div class="crdt-total">Total: <span id="total-a">0</span></div>
+              <button class="btn btn-primary" id="btn-inc-a">Increment A</button>
+            </div>
+
+            <div class="crdt-sync-visual">
+              <button class="btn btn-sync" id="btn-sync">
+                <span class="sync-arrows">⇄</span>
+                BLE Sync
+              </button>
+              <div class="sync-status" id="sync-status">Not synced</div>
+            </div>
+
+            <div class="crdt-node" id="node-b">
+              <div class="crdt-node-header">
+                <span class="crdt-node-icon">📱</span>
+                <span>Device B</span>
+              </div>
+              <div class="crdt-state" id="state-b">
+                <div class="crdt-entry"><span class="crdt-key">A:</span> <span class="crdt-val" id="val-b-a">0</span></div>
+                <div class="crdt-entry"><span class="crdt-key">B:</span> <span class="crdt-val" id="val-b-b">0</span></div>
+              </div>
+              <div class="crdt-total">Total: <span id="total-b">0</span></div>
+              <button class="btn btn-primary" id="btn-inc-b">Increment B</button>
+            </div>
+          </div>
+
+          <div class="crdt-properties">
+            <h4>Mathematical Properties</h4>
+            <div class="property-checks">
+              <div class="property-check" id="check-comm">
+                <span class="check-icon">⬜</span>
+                <span><strong>Commutative:</strong> merge(A,B) = merge(B,A)</span>
+              </div>
+              <div class="property-check" id="check-assoc">
+                <span class="check-icon">⬜</span>
+                <span><strong>Associative:</strong> merge(A, merge(B,C)) = merge(merge(A,B), C)</span>
+              </div>
+              <div class="property-check" id="check-idemp">
+                <span class="check-icon">⬜</span>
+                <span><strong>Idempotent:</strong> merge(A,A) = A</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="convergence-test">
+          <h3>🧪 Convergence Proof</h3>
+          <p>Run 100 randomized merge trials to prove Strong Eventual Consistency</p>
+          <button class="btn btn-accent" id="btn-convergence">Run 100 Trials</button>
+          <div class="convergence-result" id="convergence-result">
+            <div class="convergence-bar-container">
+              <div class="convergence-bar" id="convergence-bar" style="width:0%"></div>
+            </div>
+            <div class="convergence-text" id="convergence-text">Click to start</div>
+          </div>
+          <div class="convergence-log" id="convergence-log"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GPS FILTER TAB ────────────────────────────────────── -->
+    <section class="tab-content" id="content-filter">
+      <div class="section-header">
+        <h2>GPS Noise Filter — Anti-Spoofing</h2>
+        <p class="section-desc">Rejects invalid GPS readings: velocity >25 km/h, accuracy >50m, teleportation detection</p>
+      </div>
+
+      <div class="filter-layout">
+        <div class="filter-demo">
+          <h3>📡 Live Filter Simulation</h3>
+          <button class="btn btn-primary" id="btn-run-filter">Generate & Filter 50 Points</button>
+          <div class="filter-results" id="filter-results">
+            <table class="filter-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Lat</th>
+                  <th>Lon</th>
+                  <th>Velocity</th>
+                  <th>Accuracy</th>
+                  <th>Status</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody id="filter-tbody">
+                <tr><td colspan="7" class="filter-placeholder">Click "Generate & Filter" to start</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="filter-stats">
+          <h3>Filter Statistics</h3>
+          <div class="filter-stat-cards">
+            <div class="filter-stat accepted">
+              <div class="filter-stat-val" id="filter-accepted">—</div>
+              <div class="filter-stat-label">Accepted</div>
+            </div>
+            <div class="filter-stat rejected">
+              <div class="filter-stat-val" id="filter-rejected">—</div>
+              <div class="filter-stat-label">Rejected</div>
+            </div>
+            <div class="filter-stat rate">
+              <div class="filter-stat-val" id="filter-rate">—</div>
+              <div class="filter-stat-label">Accept Rate</div>
+            </div>
+          </div>
+
+          <div class="filter-rules">
+            <h4>Rejection Rules</h4>
+            <div class="rule">
+              <span class="rule-icon">🚗</span>
+              <div>
+                <strong>Velocity > 25 km/h</strong>
+                <p>Likely vehicle or GPS spike</p>
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-icon">📡</span>
+              <div>
+                <strong>Accuracy > 50m</strong>
+                <p>Poor satellite fix</p>
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-icon">⚡</span>
+              <div>
+                <strong>Teleportation</strong>
+                <p>Implied speed between points exceeds limit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ARCHITECTURE TAB ──────────────────────────────────── -->
+    <section class="tab-content" id="content-arch">
+      <div class="section-header">
+        <h2>System Architecture</h2>
+        <p class="section-desc">Monorepo design with three distinct edge layers</p>
+      </div>
+
+      <div class="arch-layout">
+        <div class="arch-layers">
+          <div class="arch-layer layer-viz">
+            <div class="layer-badge">Layer 1</div>
+            <h3>📊 Visualization Layer</h3>
+            <p>React Native Frontend — 60FPS rendering</p>
+            <div class="layer-modules">
+              <span class="module">Ghost Radar</span>
+              <span class="module">RII Gauge</span>
+              <span class="module">Leaderboard</span>
+              <span class="module">Run Screen</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↕</div>
+          <div class="arch-layer layer-core">
+            <div class="layer-badge">Layer 2</div>
+            <h3>🧮 Intelligence Core</h3>
+            <p>Edge logic — all computation on-device</p>
+            <div class="layer-modules">
+              <span class="module">Haversine</span>
+              <span class="module">RII Engine</span>
+              <span class="module">GPS Filter</span>
+              <span class="module">G-Counter CRDT</span>
+              <span class="module">Merge Engine</span>
+              <span class="module">Pace Calculator</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↕</div>
+          <div class="arch-layer layer-data">
+            <div class="layer-badge">Layer 3</div>
+            <h3>💾 Data & Communication</h3>
+            <p>SQLite persistence + BLE GATT profiles</p>
+            <div class="layer-modules">
+              <span class="module">SQLite (WAL)</span>
+              <span class="module">BLE Peripheral</span>
+              <span class="module">BLE Central</span>
+              <span class="module">State Vector Codec</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-dataflow">
+          <h3>Data Flow Pipeline</h3>
+          <div class="dataflow-chain">
+            <div class="dataflow-step">📡<br>GNSS</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">💾<br>SQLite</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">🧮<br>RII</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">📦<br>JSON</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">📡<br>BLE</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">🔄<br>CRDT</div>
+            <div class="dataflow-arrow">→</div>
+            <div class="dataflow-step">📊<br>UI</div>
+          </div>
+        </div>
+
+        <div class="tech-stack">
+          <h3>Tech Stack</h3>
+          <div class="tech-grid">
+            <div class="tech-item"><span class="tech-icon">⚛️</span> React Native</div>
+            <div class="tech-item"><span class="tech-icon">📘</span> TypeScript</div>
+            <div class="tech-item"><span class="tech-icon">💾</span> SQLite (WAL)</div>
+            <div class="tech-item"><span class="tech-icon">📡</span> BLE P2P</div>
+            <div class="tech-item"><span class="tech-icon">🐍</span> Python (Test Data)</div>
+            <div class="tech-item"><span class="tech-icon">🧪</span> Jest (75 Tests)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>Ghost-Tracker PEC Framework</span>
+    <span class="divider">|</span>
+    <span>FYP Progress Review — Phases 1-3</span>
+    <span class="divider">|</span>
+    <span>April 2026</span>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

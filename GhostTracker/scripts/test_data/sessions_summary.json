@@ -1,0 +1,67 @@
+[
+  {
+    "id": "b62db600-d1e1-4163-a1c8-5ff05234dec5",
+    "device_id": "device-kamal",
+    "user_alias": "Kamal",
+    "route_id": "bellanwila-loop-01",
+    "started_at": 1773536400000,
+    "ended_at": 1773536666000,
+    "total_distance_m": 16816.0,
+    "avg_pace_s_per_km": 15.82,
+    "total_time_s": 266.0,
+    "point_count": 267,
+    "is_pb": true
+  },
+  {
+    "id": "0ddbca12-1335-47f5-bb67-8c6f04ee3be7",
+    "device_id": "device-nuwan",
+    "user_alias": "Nuwan",
+    "route_id": "bellanwila-loop-01",
+    "started_at": 1773622800000,
+    "ended_at": 1773623095000,
+    "total_distance_m": 1869.38,
+    "avg_pace_s_per_km": 157.81,
+    "total_time_s": 295.0,
+    "point_count": 296,
+    "is_pb": false
+  },
+  {
+    "id": "88c2fbe8-69d6-4bca-b81b-3e678642f9fd",
+    "device_id": "device-dilshan",
+    "user_alias": "Dilshan",
+    "route_id": "bellanwila-loop-01",
+    "started_at": 1773709200000,
+    "ended_at": 1773709512000,
+    "total_distance_m": 1925.02,
+    "avg_pace_s_per_km": 162.08,
+    "total_time_s": 312.0,
+    "point_count": 313,
+    "is_pb": false
+  },
+  {
+    "id": "a3ba7eb2-8367-4cbf-aaa6-6f8b80e967f5",
+    "device_id": "device-tharindu",
+    "user_alias": "Tharindu",
+    "route_id": "bellanwila-loop-01",
+    "started_at": 1773795600000,
+    "ended_at": 1773795828000,
+    "total_distance_m": 1552.07,
+    "avg_pace_s_per_km": 146.9,
+    "total_time_s": 228.0,
+    "point_count": 229,
+    "is_pb": false
+  },
+  {
+    "id": "a4e02c0c-b13e-4459-8e89-f2db34aa13ae",
+    "device_id": "device-supun",
+    "user_alias": "Supun",
+    "route_id": "bellanwila-loop-01",
+    "started_at": 1773882000000,
+    "ended_at": 1773882348000,
+    "total_distance_m": 1913.88,
+    "avg_pace_s_per_km": 181.83,
+    "total_time_s": 348.0,
+    "point_count": 349,
+    "is_pb": false
+  }
+]
