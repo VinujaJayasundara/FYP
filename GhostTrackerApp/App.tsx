@@ -18,16 +18,102 @@ import {
 } from './src/data/mockData';
 import RunScreen from './src/screens/RunScreen';
 
+// ── Design Tokens ─────────────────────────────────────────
+const C = {
+  bg: '#000000',
+  surface: '#1C1C1E',
+  surfaceElevated: '#2C2C2E',
+  separator: '#38383A',
+  accent: '#00FF87',
+  accentDim: '#00FF8730',
+  teal: '#00D4AA',
+  red: '#FF3B30',
+  amber: '#FF9F0A',
+  blue: '#0A84FF',
+  gold: '#FFD60A',
+  silver: '#8E8E93',
+  bronze: '#AC8E68',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#8E8E93',
+  textTertiary: '#636366',
+};
+
+// ── Tab Icon Components ───────────────────────────────────
+
+function IconRun({ active }: { active: boolean }) {
+  const color = active ? C.accent : C.textTertiary;
+  return (
+    <View style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{
+        width: 0, height: 0,
+        borderLeftWidth: 10, borderLeftColor: color,
+        borderTopWidth: 7, borderTopColor: 'transparent',
+        borderBottomWidth: 7, borderBottomColor: 'transparent',
+        marginLeft: 3,
+      }} />
+    </View>
+  );
+}
+
+function IconDashboard({ active }: { active: boolean }) {
+  const color = active ? C.accent : C.textTertiary;
+  return (
+    <View style={{ width: 24, height: 24, flexDirection: 'row', flexWrap: 'wrap', gap: 3, alignItems: 'center', justifyContent: 'center' }}>
+      {[0, 1, 2, 3].map(i => (
+        <View key={i} style={{ width: 9, height: 9, borderRadius: 2, backgroundColor: color }} />
+      ))}
+    </View>
+  );
+}
+
+function IconSessions({ active }: { active: boolean }) {
+  const color = active ? C.accent : C.textTertiary;
+  return (
+    <View style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: 14, height: 14, borderRadius: 7, borderWidth: 2, borderColor: color }} />
+      <View style={{ width: 2, height: 6, backgroundColor: color, marginTop: -2 }} />
+    </View>
+  );
+}
+
+function IconGhost({ active }: { active: boolean }) {
+  const color = active ? C.accent : C.textTertiary;
+  return (
+    <View style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{
+        width: 16, height: 18, borderTopLeftRadius: 8, borderTopRightRadius: 8,
+        backgroundColor: color, opacity: active ? 1 : 0.7,
+      }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 6 }}>
+          <View style={{ width: 3, height: 3, borderRadius: 2, backgroundColor: C.bg }} />
+          <View style={{ width: 3, height: 3, borderRadius: 2, backgroundColor: C.bg }} />
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function IconTrophy({ active }: { active: boolean }) {
+  const color = active ? C.accent : C.textTertiary;
+  return (
+    <View style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ width: 14, height: 10, borderWidth: 2, borderColor: color, borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomWidth: 0 }} />
+      <View style={{ width: 2, height: 4, backgroundColor: color }} />
+      <View style={{ width: 10, height: 2, backgroundColor: color, borderRadius: 1 }} />
+    </View>
+  );
+}
+
 // ── Tab Navigation ────────────────────────────────────────
 
 type TabKey = 'run' | 'dashboard' | 'sessions' | 'ghost' | 'leaderboard';
 
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'run', label: 'Run', icon: '▶️' },
-  { key: 'dashboard', label: 'Home', icon: '📊' },
-  { key: 'sessions', label: 'Sessions', icon: '🏃' },
-  { key: 'ghost', label: 'Ghost', icon: '👻' },
-  { key: 'leaderboard', label: 'Board', icon: '🏆' },
+const TABS: { key: TabKey; label: string; Icon: React.FC<{ active: boolean }> }[] = [
+  { key: 'run', label: 'Run', Icon: IconRun },
+  { key: 'dashboard', label: 'Home', Icon: IconDashboard },
+  { key: 'sessions', label: 'History', Icon: IconSessions },
+  { key: 'ghost', label: 'Ghost', Icon: IconGhost },
+  { key: 'leaderboard', label: 'Board', Icon: IconTrophy },
 ];
 
 export default function App() {
@@ -36,18 +122,16 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0a0e1a" />
+      <StatusBar barStyle="light-content" backgroundColor={C.bg} />
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerIcon}>👻</Text>
         <View>
-          <Text style={styles.headerTitle}>Ghost-Tracker</Text>
-          <Text style={styles.headerSub}>P2P Edge-Consensus Framework</Text>
+          <Text style={styles.headerTitle}>GHOST TRACKER</Text>
+          <Text style={styles.headerSub}>RACE YOUR GHOST</Text>
         </View>
-        <View style={styles.statusPill}>
-          <View style={styles.pulseDot} />
-          <Text style={styles.statusText}>Live</Text>
+        <View style={styles.liveDotContainer}>
+          <View style={styles.liveDot} />
         </View>
       </View>
 
@@ -74,20 +158,22 @@ export default function App() {
 
       {/* Bottom Tabs */}
       <View style={styles.tabBar}>
-        {TABS.map((tab) => (
-          <TouchableOpacity
-            key={tab.key}
-            style={[styles.tab, activeTab === tab.key && styles.tabActive]}
-            onPress={() => setActiveTab(tab.key)}
-          >
-            <Text style={[styles.tabIcon, activeTab === tab.key && tab.key === 'run' && { fontSize: 22 }]}>
-              {tab.icon}
-            </Text>
-            <Text style={[styles.tabLabel, activeTab === tab.key && styles.tabLabelActive]}>
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.key;
+          return (
+            <TouchableOpacity
+              key={tab.key}
+              style={styles.tab}
+              onPress={() => setActiveTab(tab.key)}
+            >
+              {isActive && <View style={styles.tabActiveDot} />}
+              <tab.Icon active={isActive} />
+              <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
@@ -106,29 +192,32 @@ function DashboardTab() {
 
   return (
     <View>
-      <View style={styles.card}>
-        <Text style={styles.welcomeText}>Welcome, Vinuja 👋</Text>
-        <Text style={styles.welcomeSub}>Your improvement journey at a glance</Text>
-      </View>
+      <Text style={styles.greeting}>Good Morning, {vinuja.name}</Text>
+      <Text style={styles.greetingSub}>Your improvement journey at a glance</Text>
 
-      <View style={[styles.card, styles.riiCard]}>
-        <Text style={styles.riiLabel}>Your RII Score</Text>
-        <Text style={[styles.riiScore, { color: status.color }]}>{rii.toFixed(2)}</Text>
-        <Text style={styles.riiEmoji}>{status.emoji} {status.label}</Text>
-        <Text style={styles.riiDesc}>
+      {/* RII Hero */}
+      <View style={styles.riiHero}>
+        <View style={styles.riiRing}>
+          <Text style={[styles.riiHeroScore, { color: status.color }]}>{rii.toFixed(2)}</Text>
+        </View>
+        <Text style={styles.riiHeroLabel}>RII SCORE</Text>
+        <Text style={[styles.riiHeroStatus, { color: status.color }]}>{status.label}</Text>
+        <Text style={styles.riiHeroDesc}>
           {formatPace(firstSession.paceSPerKm)} → {formatPace(latestSession.paceSPerKm)} /km
         </Text>
       </View>
 
+      {/* Stats Row */}
       <View style={styles.statsGrid}>
-        <StatCard label="Sessions" value="6" color="#3b82f6" />
-        <StatCard label="Improved" value={`${vinuja.totalImprovement.toFixed(0)}%`} color="#22c55e" />
-        <StatCard label="PB Pace" value={formatPace(vinuja.currentPBPace)} color="#a855f7" />
-        <StatCard label="Distance" value="15km" color="#f59e0b" />
+        <StatCard label="SESSIONS" value="6" accent={C.blue} />
+        <StatCard label="IMPROVED" value={`${vinuja.totalImprovement.toFixed(0)}%`} accent={C.accent} />
+        <StatCard label="PB PACE" value={formatPace(vinuja.currentPBPace)} accent={C.teal} />
+        <StatCard label="DISTANCE" value="15km" accent={C.amber} />
       </View>
 
+      {/* Pace Trend */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>📈 Pace Improvement Trend</Text>
+        <Text style={styles.sectionLabel}>PACE TREND</Text>
         <View style={styles.trendChart}>
           {vinuja.sessions.map((s, i) => {
             const maxPace = 400;
@@ -141,7 +230,8 @@ function DashboardTab() {
                     styles.trendBar,
                     {
                       height: Math.max(20, height),
-                      backgroundColor: s.isPB ? '#22c55e' : '#3b82f6',
+                      backgroundColor: s.isPB ? C.accent : C.blue,
+                      opacity: s.isPB ? 1 : 0.6,
                     },
                   ]}
                 />
@@ -153,18 +243,18 @@ function DashboardTab() {
         </View>
       </View>
 
+      {/* Key Features */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>🎯 Problems We Solve</Text>
+        <Text style={styles.sectionLabel}>HOW IT WORKS</Text>
         {[
-          { icon: '🔒', title: 'Privacy', desc: 'All data stays on YOUR device', color: '#22c55e' },
-          { icon: '📡', title: 'Connectivity', desc: '100% offline via BLE P2P', color: '#3b82f6' },
-          { icon: '⚖️', title: 'Fairness', desc: 'RII normalizes by personal baseline', color: '#a855f7' },
+          { title: 'Privacy First', desc: 'All data stays on your device', accent: C.accent },
+          { title: 'Offline Ready', desc: '100% offline via BLE P2P', accent: C.blue },
+          { title: 'Fair Rankings', desc: 'RII normalizes by your baseline', accent: C.teal },
         ].map((item, i) => (
-          <View key={i} style={[styles.trilemmaItem, { borderLeftColor: item.color }]}>
-            <Text style={styles.trilemmaIcon}>{item.icon}</Text>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.trilemmaTitle}>{item.title}</Text>
-              <Text style={styles.trilemmaDesc}>{item.desc}</Text>
+          <View key={i} style={[styles.featureItem, { borderLeftColor: item.accent }]}>
+            <View>
+              <Text style={styles.featureTitle}>{item.title}</Text>
+              <Text style={styles.featureDesc}>{item.desc}</Text>
             </View>
           </View>
         ))}
@@ -203,21 +293,21 @@ function SessionsTab({
       </ScrollView>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>🏃 {runner.name}</Text>
-        <Text style={styles.cardSub}>{runner.location} · {runner.routeDistM}m route</Text>
+        <Text style={styles.cardName}>{runner.name}</Text>
+        <Text style={styles.cardLocation}>{runner.location} · {runner.routeDistM}m route</Text>
         <View style={styles.runnerStats}>
           <View style={styles.runnerStatItem}>
             <Text style={styles.runnerStatValue}>{formatPace(runner.currentPBPace)}</Text>
-            <Text style={styles.runnerStatLabel}>PB Pace</Text>
+            <Text style={styles.runnerStatLabel}>PB PACE</Text>
           </View>
           <View style={styles.runnerStatItem}>
-            <Text style={[styles.runnerStatValue, { color: '#22c55e' }]}>
+            <Text style={[styles.runnerStatValue, { color: C.accent }]}>
               +{runner.totalImprovement.toFixed(1)}%
             </Text>
-            <Text style={styles.runnerStatLabel}>Improved</Text>
+            <Text style={styles.runnerStatLabel}>IMPROVED</Text>
           </View>
           <View style={styles.runnerStatItem}>
-            <Text style={[styles.runnerStatValue, { color: '#06b6d4' }]}>
+            <Text style={[styles.runnerStatValue, { color: C.teal }]}>
               {runner.latestRII.toFixed(2)}
             </Text>
             <Text style={styles.runnerStatLabel}>RII</Text>
@@ -225,7 +315,7 @@ function SessionsTab({
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Session History</Text>
+      <Text style={styles.sectionLabelOutside}>SESSION HISTORY</Text>
       {runner.sessions.map((s, i) => {
         const rii = calculateRII(runner.sessions[0].paceSPerKm, s.paceSPerKm);
         const riiStatus = getRIIStatus(rii);
@@ -246,7 +336,7 @@ function SessionsTab({
               <Text style={[styles.sessionRII, { color: riiStatus.color }]}>
                 {rii > 0 ? rii.toFixed(2) : '—'}
               </Text>
-              {s.isPB && <Text style={styles.pbBadge}>★ PB</Text>}
+              {s.isPB && <Text style={styles.pbBadge}>PB</Text>}
               {improvement > 0 && <Text style={styles.improveBadge}>+{improvement.toFixed(0)}%</Text>}
             </View>
           </View>
@@ -270,40 +360,42 @@ function GhostTab() {
   return (
     <View>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>👻 Ghost Race Simulation</Text>
-        <Text style={styles.cardSub}>Vinuja: Session 6 (latest) vs Ghost (Session 1)</Text>
+        <Text style={styles.ghostHeader}>VS YOUR GHOST</Text>
+        <Text style={styles.cardLocation}>Vinuja: Session 6 vs Ghost (Session 1)</Text>
         <View style={styles.ghostMatchup}>
-          <View style={[styles.ghostRunner, { borderColor: '#ef4444' }]}>
-            <Text style={styles.ghostLabel}>👻 Ghost</Text>
-            <Text style={styles.ghostPace}>{formatPace(ghostPace)} /km</Text>
-            <Text style={styles.ghostDetail}>Session 1 (PB)</Text>
+          <View style={[styles.ghostRunner, { borderColor: C.red + '60' }]}>
+            <Text style={[styles.ghostLabel, { color: C.red }]}>GHOST</Text>
+            <Text style={styles.ghostPace}>{formatPace(ghostPace)}</Text>
+            <Text style={styles.ghostDetail}>Session 1</Text>
           </View>
           <Text style={styles.vsText}>VS</Text>
-          <View style={[styles.ghostRunner, { borderColor: '#22c55e' }]}>
-            <Text style={styles.ghostLabel}>🏃 Live</Text>
-            <Text style={styles.ghostPace}>{formatPace(livePace)} /km</Text>
-            <Text style={styles.ghostDetail}>Session 6 (latest)</Text>
+          <View style={[styles.ghostRunner, { borderColor: C.accent + '60' }]}>
+            <Text style={[styles.ghostLabel, { color: C.accent }]}>YOU</Text>
+            <Text style={styles.ghostPace}>{formatPace(livePace)}</Text>
+            <Text style={styles.ghostDetail}>Session 6</Text>
           </View>
         </View>
       </View>
 
-      <View style={[styles.card, { borderColor: '#22c55e', borderWidth: 1 }]}>
-        <Text style={{ textAlign: 'center', fontSize: 36 }}>🔥</Text>
-        <Text style={[styles.riiScore, { color: '#22c55e', textAlign: 'center' }]}>
-          RII: {finalRII.toFixed(3)}
+      {/* RII Result */}
+      <View style={[styles.card, styles.riiResultCard]}>
+        <Text style={styles.riiResultLabel}>RII SCORE</Text>
+        <Text style={[styles.riiResultValue, { color: C.accent }]}>
+          {finalRII.toFixed(3)}
         </Text>
-        <Text style={[styles.riiDesc, { textAlign: 'center' }]}>
-          {((finalRII - 1) * 100).toFixed(1)}% faster than Ghost!
+        <Text style={[styles.riiResultPct, { color: C.accent }]}>
+          +{((finalRII - 1) * 100).toFixed(1)}% faster than Ghost
         </Text>
       </View>
 
+      {/* Race Table */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>⏱️ Second-by-Second Race</Text>
+        <Text style={styles.sectionLabel}>SECOND-BY-SECOND</Text>
         <View style={styles.raceHeader}>
-          <Text style={styles.raceHeaderCell}>Time</Text>
-          <Text style={styles.raceHeaderCell}>Ghost</Text>
-          <Text style={styles.raceHeaderCell}>Live</Text>
-          <Text style={styles.raceHeaderCell}>Lead</Text>
+          <Text style={styles.raceHeaderCell}>TIME</Text>
+          <Text style={styles.raceHeaderCell}>GHOST</Text>
+          <Text style={styles.raceHeaderCell}>YOU</Text>
+          <Text style={styles.raceHeaderCell}>LEAD</Text>
         </View>
         {ghostRace.map((p, i) => (
           <View key={i} style={[styles.raceRow, i % 2 === 0 && styles.raceRowAlt]}>
@@ -312,7 +404,7 @@ function GhostTab() {
             </Text>
             <Text style={styles.raceCell}>{p.ghostDistM}m</Text>
             <Text style={styles.raceCell}>{p.liveDistM}m</Text>
-            <Text style={[styles.raceCell, { color: p.leadLagM >= 0 ? '#22c55e' : '#ef4444' }]}>
+            <Text style={[styles.raceCell, { color: p.leadLagM >= 0 ? C.accent : C.red }]}>
               {p.leadLagM >= 0 ? '+' : ''}{p.leadLagM}m
             </Text>
           </View>
@@ -328,38 +420,44 @@ function GhostTab() {
 
 function LeaderboardTab() {
   const leaderboard = getLeaderboard();
+  const rankColors = [C.gold, C.silver, C.bronze];
+
   return (
     <View>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>🏆 Cross-Location Leaderboard</Text>
-        <Text style={styles.cardSub}>Bellanwila Park vs KDU Clubhouse</Text>
-        <Text style={styles.cardSub}>Ranked by IMPROVEMENT, not absolute speed</Text>
+        <Text style={styles.sectionLabel}>CROSS-LOCATION LEADERBOARD</Text>
+        <Text style={styles.cardLocation}>Bellanwila Park vs KDU Clubhouse</Text>
+        <Text style={[styles.cardLocation, { marginTop: 4 }]}>Ranked by improvement, not speed</Text>
       </View>
-      {leaderboard.map((r, i) => {
-        const medals = ['🥇', '🥈', '🥉'];
-        const medal = i < 3 ? medals[i] : `#${i + 1}`;
-        return (
-          <View key={i} style={[styles.leaderRow, i === 0 && styles.leaderRowFirst]}>
-            <Text style={styles.leaderRank}>{medal}</Text>
-            <View style={styles.leaderInfo}>
-              <Text style={styles.leaderName}>{r.name}</Text>
-              <Text style={styles.leaderLocation}>{r.location} · {r.routeDistM}m</Text>
-              <Text style={styles.leaderPace}>
-                {formatPace(r.sessions[0].paceSPerKm)} → {formatPace(r.currentPBPace)} /km
-              </Text>
-            </View>
-            <View style={styles.leaderRight}>
-              <Text style={[styles.leaderImprove, { color: '#22c55e' }]}>
-                +{r.totalImprovement.toFixed(1)}%
-              </Text>
-              <Text style={styles.leaderRII}>RII: {r.latestRII.toFixed(2)}</Text>
-            </View>
+      {leaderboard.map((r, i) => (
+        <View key={i} style={[styles.leaderRow, i === 0 && styles.leaderRowFirst]}>
+          <View style={styles.leaderRankContainer}>
+            {i < 3 ? (
+              <View style={[styles.rankDot, { backgroundColor: rankColors[i] }]}>
+                <Text style={styles.rankDotText}>{i + 1}</Text>
+              </View>
+            ) : (
+              <Text style={styles.leaderRank}>#{i + 1}</Text>
+            )}
           </View>
-        );
-      })}
-      <View style={[styles.card, { marginTop: 16 }]}>
-        <Text style={[styles.cardSub, { color: '#22c55e', fontWeight: '600' }]}>
-          💡 Malith (4:48/km) is the FASTEST runner but ranks LAST because he improved the least.
+          <View style={styles.leaderInfo}>
+            <Text style={styles.leaderName}>{r.name}</Text>
+            <Text style={styles.leaderLocation}>{r.location} · {r.routeDistM}m</Text>
+            <Text style={styles.leaderPace}>
+              {formatPace(r.sessions[0].paceSPerKm)} → {formatPace(r.currentPBPace)} /km
+            </Text>
+          </View>
+          <View style={styles.leaderRight}>
+            <Text style={[styles.leaderImprove, { color: C.accent }]}>
+              +{r.totalImprovement.toFixed(1)}%
+            </Text>
+            <Text style={styles.leaderRII}>RII {r.latestRII.toFixed(2)}</Text>
+          </View>
+        </View>
+      ))}
+      <View style={[styles.card, { marginTop: 12 }]}>
+        <Text style={[styles.cardLocation, { color: C.accent }]}>
+          Malith is the fastest runner (4:48/km) but ranks last — least improvement.
         </Text>
       </View>
     </View>
@@ -367,13 +465,13 @@ function LeaderboardTab() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// COMPONENTS
+// STAT CARD COMPONENT
 // ═══════════════════════════════════════════════════════════
 
-function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
+function StatCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   return (
-    <View style={styles.statCard}>
-      <Text style={[styles.statValue, { color }]}>{value}</Text>
+    <View style={[styles.statCard, { borderLeftColor: accent }]}>
+      <Text style={styles.statValue}>{value}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
@@ -384,124 +482,213 @@ function StatCard({ label, value, color }: { label: string; value: string; color
 // ═══════════════════════════════════════════════════════════
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0e1a' },
+  container: { flex: 1, backgroundColor: C.bg },
+
+  // Header
   header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingTop: Platform.OS === 'ios' ? 54 : 36, paddingBottom: 12, paddingHorizontal: 20,
-    backgroundColor: '#111827', borderBottomWidth: 1, borderBottomColor: '#2a3050', gap: 12,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingTop: Platform.OS === 'ios' ? 54 : 40, paddingBottom: 14, paddingHorizontal: 20,
+    backgroundColor: C.bg, borderBottomWidth: 0.5, borderBottomColor: C.separator,
   },
-  headerIcon: { fontSize: 32 },
-  headerTitle: { fontSize: 20, fontWeight: '800', color: '#22c55e' },
-  headerSub: { fontSize: 11, color: '#64748b' },
-  statusPill: {
-    flexDirection: 'row', alignItems: 'center', gap: 6, marginLeft: 'auto',
-    paddingHorizontal: 10, paddingVertical: 4, backgroundColor: '#22c55e20',
-    borderRadius: 20, borderWidth: 1, borderColor: '#22c55e60',
+  headerTitle: {
+    fontSize: 16, fontWeight: '700', color: C.textPrimary, letterSpacing: 2,
   },
-  pulseDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#22c55e' },
-  statusText: { fontSize: 11, fontWeight: '600', color: '#22c55e' },
+  headerSub: {
+    fontSize: 10, color: C.textTertiary, letterSpacing: 1.5, marginTop: 2,
+  },
+  liveDotContainer: {
+    width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
+  },
+  liveDot: {
+    width: 8, height: 8, borderRadius: 4, backgroundColor: C.accent,
+  },
+
+  // Content
   content: { flex: 1, paddingHorizontal: 16, paddingTop: 16 },
-  card: { backgroundColor: '#1a1f35', borderRadius: 16, padding: 20, marginBottom: 12 },
-  cardTitle: { fontSize: 18, fontWeight: '700', color: '#f1f5f9', marginBottom: 4 },
-  cardSub: { fontSize: 13, color: '#94a3b8' },
-  welcomeText: { fontSize: 22, fontWeight: '700', color: '#f1f5f9' },
-  welcomeSub: { fontSize: 14, color: '#94a3b8', marginTop: 4 },
-  riiCard: { alignItems: 'center', borderWidth: 1, borderColor: '#2a3050' },
-  riiLabel: { fontSize: 13, color: '#94a3b8', marginBottom: 4 },
-  riiScore: { fontSize: 48, fontWeight: '800', fontFamily: 'monospace' },
-  riiEmoji: { fontSize: 16, fontWeight: '600', marginTop: 4, color: '#f1f5f9' },
-  riiDesc: { fontSize: 13, color: '#94a3b8', marginTop: 8 },
-  statsGrid: { flexDirection: 'row', gap: 8, marginBottom: 12 },
-  statCard: { flex: 1, backgroundColor: '#1a1f35', borderRadius: 12, padding: 14, alignItems: 'center' },
-  statValue: { fontSize: 20, fontWeight: '800', fontFamily: 'monospace' },
-  statLabel: { fontSize: 11, color: '#94a3b8', marginTop: 4 },
-  trendChart: {
-    flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around',
-    height: 160, marginTop: 12, paddingTop: 8,
-  },
-  trendBarWrapper: { alignItems: 'center', flex: 1 },
-  trendBar: { width: 28, borderRadius: 6, minHeight: 20 },
-  trendLabel: { fontSize: 10, color: '#94a3b8', marginTop: 4, fontFamily: 'monospace' },
-  trendDate: { fontSize: 9, color: '#64748b', marginTop: 2 },
-  trilemmaItem: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 12, borderLeftWidth: 3, paddingLeft: 12, marginTop: 8,
-  },
-  trilemmaIcon: { fontSize: 24 },
-  trilemmaTitle: { fontSize: 15, fontWeight: '700', color: '#f1f5f9' },
-  trilemmaDesc: { fontSize: 12, color: '#94a3b8' },
-  runnerSelector: { marginBottom: 12 },
-  runnerChip: {
-    paddingHorizontal: 16, paddingVertical: 8, backgroundColor: '#1a1f35',
-    borderRadius: 20, marginRight: 8, borderWidth: 1, borderColor: '#2a3050',
-  },
-  runnerChipActive: { backgroundColor: '#3b82f630', borderColor: '#3b82f6' },
-  runnerChipText: { color: '#94a3b8', fontWeight: '500', fontSize: 14 },
-  runnerChipTextActive: { color: '#3b82f6' },
-  runnerStats: { flexDirection: 'row', marginTop: 16, gap: 8 },
-  runnerStatItem: {
-    flex: 1, alignItems: 'center', backgroundColor: '#111827', borderRadius: 10, padding: 12,
-  },
-  runnerStatValue: { fontSize: 18, fontWeight: '800', color: '#f1f5f9', fontFamily: 'monospace' },
-  runnerStatLabel: { fontSize: 11, color: '#64748b', marginTop: 4 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: '#f1f5f9', marginVertical: 12, marginLeft: 4 },
-  sessionCard: {
-    backgroundColor: '#1a1f35', borderRadius: 12, padding: 14, flexDirection: 'row',
-    alignItems: 'center', marginBottom: 8, borderLeftWidth: 3, borderLeftColor: '#2a3050',
-  },
-  sessionCardPB: { borderLeftColor: '#22c55e' },
-  sessionLeft: { width: 60 },
-  sessionNum: { fontSize: 13, fontWeight: '700', color: '#f1f5f9' },
-  sessionDate: { fontSize: 11, color: '#64748b' },
-  sessionCenter: { flex: 1, paddingHorizontal: 8 },
-  sessionPace: { fontSize: 16, fontWeight: '700', color: '#f1f5f9', fontFamily: 'monospace' },
-  sessionTime: { fontSize: 11, color: '#94a3b8' },
-  sessionRight: { alignItems: 'flex-end' },
-  sessionRII: { fontSize: 16, fontWeight: '800', fontFamily: 'monospace' },
-  pbBadge: {
-    fontSize: 10, color: '#22c55e', fontWeight: '700', backgroundColor: '#22c55e20',
-    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2,
-  },
-  improveBadge: { fontSize: 10, color: '#3b82f6', fontWeight: '600', marginTop: 2 },
-  ghostMatchup: { flexDirection: 'row', alignItems: 'center', marginTop: 16, gap: 8 },
-  ghostRunner: {
-    flex: 1, backgroundColor: '#111827', borderRadius: 12, padding: 16,
-    alignItems: 'center', borderWidth: 1,
-  },
-  ghostLabel: { fontSize: 14, fontWeight: '700', color: '#f1f5f9' },
-  ghostPace: { fontSize: 20, fontWeight: '800', color: '#f1f5f9', marginTop: 4, fontFamily: 'monospace' },
-  ghostDetail: { fontSize: 11, color: '#64748b', marginTop: 2 },
-  vsText: { fontSize: 16, fontWeight: '800', color: '#64748b' },
-  raceHeader: {
-    flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#2a3050',
-  },
-  raceHeaderCell: {
-    flex: 1, fontSize: 11, fontWeight: '600', color: '#64748b',
-    textAlign: 'center', textTransform: 'uppercase',
-  },
-  raceRow: { flexDirection: 'row', paddingVertical: 8 },
-  raceRowAlt: { backgroundColor: '#111827' },
-  raceCell: { flex: 1, fontSize: 13, color: '#f1f5f9', textAlign: 'center', fontFamily: 'monospace' },
-  leaderRow: {
-    backgroundColor: '#1a1f35', borderRadius: 12, padding: 14, flexDirection: 'row',
-    alignItems: 'center', marginBottom: 8, gap: 12,
-  },
-  leaderRowFirst: { borderWidth: 1, borderColor: '#f59e0b40' },
-  leaderRank: { fontSize: 24, width: 36, textAlign: 'center' },
-  leaderInfo: { flex: 1 },
-  leaderName: { fontSize: 16, fontWeight: '700', color: '#f1f5f9' },
-  leaderLocation: { fontSize: 11, color: '#64748b' },
-  leaderPace: { fontSize: 12, color: '#94a3b8', marginTop: 2, fontFamily: 'monospace' },
-  leaderRight: { alignItems: 'flex-end' },
-  leaderImprove: { fontSize: 18, fontWeight: '800', fontFamily: 'monospace' },
-  leaderRII: { fontSize: 11, color: '#06b6d4', fontFamily: 'monospace', marginTop: 2 },
+
+  // Tab Bar
   tabBar: {
-    flexDirection: 'row', backgroundColor: '#111827', borderTopWidth: 1,
-    borderTopColor: '#2a3050', paddingBottom: Platform.OS === 'ios' ? 28 : 12, paddingTop: 8,
+    flexDirection: 'row', backgroundColor: C.bg, borderTopWidth: 0.5,
+    borderTopColor: C.separator, paddingBottom: Platform.OS === 'ios' ? 28 : 12, paddingTop: 8,
   },
   tab: { flex: 1, alignItems: 'center', paddingVertical: 4 },
-  tabActive: {},
-  tabIcon: { fontSize: 20 },
-  tabLabel: { fontSize: 10, color: '#64748b', marginTop: 2 },
-  tabLabelActive: { color: '#3b82f6', fontWeight: '600' },
+  tabActiveDot: {
+    width: 4, height: 4, borderRadius: 2, backgroundColor: C.accent,
+    position: 'absolute', top: -2,
+  },
+  tabLabel: {
+    fontSize: 10, color: C.textTertiary, marginTop: 4, fontWeight: '500',
+    letterSpacing: 0.5,
+  },
+  tabLabelActive: { color: C.accent },
+
+  // Cards
+  card: {
+    backgroundColor: C.surface, borderRadius: 16, padding: 20, marginBottom: 12,
+  },
+  sectionLabel: {
+    fontSize: 11, fontWeight: '600', color: C.textSecondary,
+    letterSpacing: 1.5, marginBottom: 12,
+  },
+  sectionLabelOutside: {
+    fontSize: 11, fontWeight: '600', color: C.textSecondary,
+    letterSpacing: 1.5, marginVertical: 12, marginLeft: 4,
+  },
+  cardName: { fontSize: 20, fontWeight: '700', color: C.textPrimary },
+  cardLocation: { fontSize: 13, color: C.textSecondary, marginTop: 2 },
+
+  // Dashboard
+  greeting: { fontSize: 24, fontWeight: '400', color: C.textPrimary, marginBottom: 2 },
+  greetingSub: { fontSize: 14, color: C.textSecondary, marginBottom: 16 },
+
+  riiHero: {
+    backgroundColor: C.surface, borderRadius: 20, padding: 28,
+    alignItems: 'center', marginBottom: 12,
+  },
+  riiRing: {
+    width: 140, height: 140, borderRadius: 70, borderWidth: 3,
+    borderColor: C.accent + '40', alignItems: 'center', justifyContent: 'center',
+    marginBottom: 12,
+  },
+  riiHeroScore: { fontSize: 48, fontWeight: '200' },
+  riiHeroLabel: {
+    fontSize: 11, fontWeight: '600', color: C.textSecondary, letterSpacing: 2,
+  },
+  riiHeroStatus: { fontSize: 16, fontWeight: '600', marginTop: 4 },
+  riiHeroDesc: { fontSize: 13, color: C.textTertiary, marginTop: 8 },
+
+  statsGrid: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+  statCard: {
+    flex: 1, backgroundColor: C.surface, borderRadius: 12, padding: 14,
+    alignItems: 'center', borderLeftWidth: 3,
+  },
+  statValue: { fontSize: 20, fontWeight: '700', color: C.textPrimary },
+  statLabel: {
+    fontSize: 9, color: C.textSecondary, marginTop: 4,
+    fontWeight: '600', letterSpacing: 1,
+  },
+
+  trendChart: {
+    flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around',
+    height: 160, paddingTop: 8,
+  },
+  trendBarWrapper: { alignItems: 'center', flex: 1 },
+  trendBar: { width: 24, borderRadius: 4, minHeight: 20 },
+  trendLabel: {
+    fontSize: 9, color: C.textSecondary, marginTop: 4, fontFamily: 'monospace',
+  },
+  trendDate: { fontSize: 8, color: C.textTertiary, marginTop: 2 },
+
+  featureItem: {
+    paddingVertical: 14, borderLeftWidth: 3, paddingLeft: 14, marginTop: 4,
+  },
+  featureTitle: { fontSize: 15, fontWeight: '600', color: C.textPrimary },
+  featureDesc: { fontSize: 12, color: C.textSecondary, marginTop: 2 },
+
+  // Sessions
+  runnerSelector: { marginBottom: 12 },
+  runnerChip: {
+    paddingHorizontal: 18, paddingVertical: 8, backgroundColor: C.surface,
+    borderRadius: 20, marginRight: 8,
+  },
+  runnerChipActive: { backgroundColor: C.surfaceElevated },
+  runnerChipText: { color: C.textSecondary, fontWeight: '500', fontSize: 14 },
+  runnerChipTextActive: { color: C.textPrimary, fontWeight: '600' },
+
+  runnerStats: { flexDirection: 'row', marginTop: 16, gap: 8 },
+  runnerStatItem: {
+    flex: 1, alignItems: 'center', backgroundColor: C.bg, borderRadius: 10, padding: 12,
+  },
+  runnerStatValue: {
+    fontSize: 18, fontWeight: '700', color: C.textPrimary, fontFamily: 'monospace',
+  },
+  runnerStatLabel: {
+    fontSize: 9, color: C.textTertiary, marginTop: 4,
+    fontWeight: '600', letterSpacing: 1,
+  },
+
+  sessionCard: {
+    backgroundColor: C.surface, borderRadius: 12, padding: 14, flexDirection: 'row',
+    alignItems: 'center', marginBottom: 8,
+  },
+  sessionCardPB: { backgroundColor: C.accent + '08' },
+  sessionLeft: { width: 60 },
+  sessionNum: { fontSize: 13, fontWeight: '600', color: C.textPrimary },
+  sessionDate: { fontSize: 11, color: C.textTertiary },
+  sessionCenter: { flex: 1, paddingHorizontal: 8 },
+  sessionPace: { fontSize: 16, fontWeight: '700', color: C.textPrimary, fontFamily: 'monospace' },
+  sessionTime: { fontSize: 11, color: C.textSecondary },
+  sessionRight: { alignItems: 'flex-end' },
+  sessionRII: { fontSize: 16, fontWeight: '700', fontFamily: 'monospace' },
+  pbBadge: {
+    fontSize: 9, color: C.accent, fontWeight: '700', backgroundColor: C.accentDim,
+    paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginTop: 2,
+    letterSpacing: 1,
+  },
+  improveBadge: { fontSize: 10, color: C.blue, fontWeight: '600', marginTop: 2 },
+
+  // Ghost Tab
+  ghostHeader: {
+    fontSize: 20, fontWeight: '800', color: C.textPrimary, letterSpacing: 1,
+  },
+  ghostMatchup: { flexDirection: 'row', alignItems: 'center', marginTop: 16, gap: 8 },
+  ghostRunner: {
+    flex: 1, backgroundColor: C.bg, borderRadius: 12, padding: 16,
+    alignItems: 'center', borderWidth: 1,
+  },
+  ghostLabel: {
+    fontSize: 11, fontWeight: '700', letterSpacing: 2,
+  },
+  ghostPace: {
+    fontSize: 22, fontWeight: '700', color: C.textPrimary, marginTop: 4, fontFamily: 'monospace',
+  },
+  ghostDetail: { fontSize: 11, color: C.textTertiary, marginTop: 2 },
+  vsText: { fontSize: 14, fontWeight: '800', color: C.textTertiary },
+
+  riiResultCard: { alignItems: 'center', borderWidth: 1, borderColor: C.accent + '30' },
+  riiResultLabel: {
+    fontSize: 11, color: C.textSecondary, letterSpacing: 2, fontWeight: '600',
+  },
+  riiResultValue: {
+    fontSize: 48, fontWeight: '200', fontFamily: 'monospace', marginVertical: 4,
+  },
+  riiResultPct: { fontSize: 14, fontWeight: '600' },
+
+  raceHeader: {
+    flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 0.5,
+    borderBottomColor: C.separator,
+  },
+  raceHeaderCell: {
+    flex: 1, fontSize: 10, fontWeight: '600', color: C.textTertiary,
+    textAlign: 'center', letterSpacing: 1,
+  },
+  raceRow: { flexDirection: 'row', paddingVertical: 10 },
+  raceRowAlt: { backgroundColor: C.bg },
+  raceCell: {
+    flex: 1, fontSize: 13, color: C.textPrimary, textAlign: 'center', fontFamily: 'monospace',
+  },
+
+  // Leaderboard
+  leaderRow: {
+    backgroundColor: C.surface, borderRadius: 12, padding: 14, flexDirection: 'row',
+    alignItems: 'center', marginBottom: 8, gap: 12,
+  },
+  leaderRowFirst: { borderWidth: 1, borderColor: C.gold + '40' },
+  leaderRankContainer: { width: 36, alignItems: 'center' },
+  rankDot: {
+    width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
+  },
+  rankDotText: { fontSize: 12, fontWeight: '800', color: C.bg },
+  leaderRank: { fontSize: 14, fontWeight: '700', color: C.textSecondary },
+  leaderInfo: { flex: 1 },
+  leaderName: { fontSize: 16, fontWeight: '700', color: C.textPrimary },
+  leaderLocation: { fontSize: 11, color: C.textTertiary },
+  leaderPace: {
+    fontSize: 12, color: C.textSecondary, marginTop: 2, fontFamily: 'monospace',
+  },
+  leaderRight: { alignItems: 'flex-end' },
+  leaderImprove: { fontSize: 18, fontWeight: '700', fontFamily: 'monospace' },
+  leaderRII: {
+    fontSize: 11, color: C.teal, fontFamily: 'monospace', marginTop: 2,
+  },
 });

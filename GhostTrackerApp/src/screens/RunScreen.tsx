@@ -408,35 +408,31 @@ function IdleView({
 
       {/* Content overlay */}
       <View style={styles.idleContent}>
-        <Text style={styles.ghostEmoji}>👻</Text>
-        <Text style={styles.idleTitle}>Ready to Run?</Text>
+        <Text style={styles.idleTitle}>START YOUR RUN</Text>
         <Text style={styles.idleSub}>
-          GPS will track your route in real-time.{'\n'}
-          See your path on the live map.
+          GPS tracking is ready.{'\n'}
+          Your route will appear on the live map.
         </Text>
 
         <TouchableOpacity style={styles.startButton} onPress={onStart}>
-          <Text style={styles.startButtonText}>START RUN</Text>
+          <Text style={styles.startButtonText}>START</Text>
         </TouchableOpacity>
 
         <View style={styles.infoRow}>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoIcon}>🗺️</Text>
-            <Text style={styles.infoLabel}>Live Map</Text>
+          <View style={styles.infoPill}>
+            <Text style={styles.infoPillText}>GPS</Text>
           </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoIcon}>📡</Text>
-            <Text style={styles.infoLabel}>1Hz GPS</Text>
+          <View style={styles.infoPill}>
+            <Text style={styles.infoPillText}>1 Hz</Text>
           </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoIcon}>👻</Text>
-            <Text style={styles.infoLabel}>Ghost Race</Text>
+          <View style={styles.infoPill}>
+            <Text style={styles.infoPillText}>LIVE MAP</Text>
           </View>
         </View>
 
         {initialLocation && (
           <Text style={styles.locationReady}>
-            📍 GPS locked · {initialLocation.latitude.toFixed(4)},{' '}
+            GPS LOCKED · {initialLocation.latitude.toFixed(4)},{' '}
             {initialLocation.longitude.toFixed(4)}
           </Text>
         )}
@@ -501,7 +497,7 @@ function RunningView({
     ghostLead >= 0
       ? `+${Math.round(ghostLead)}m ahead`
       : `${Math.round(Math.abs(ghostLead))}m behind`;
-  const ghostLeadColor = ghostLead >= 0 ? '#22c55e' : '#ef4444';
+  const ghostLeadColor = ghostLead >= 0 ? '#00FF87' : '#FF3B30';
 
   // Live RII
   const liveRII =
@@ -571,7 +567,7 @@ function RunningView({
             {routeCoords.length >= 2 && (
               <Polyline
                 coordinates={routeCoords}
-                strokeColor="#22c55e"
+                strokeColor="#00FF87"
                 strokeWidth={4}
                 lineDashPattern={undefined}
               />
@@ -585,7 +581,7 @@ function RunningView({
                 tracksViewChanges={false}
               >
                 <View style={styles.startMarker}>
-                  <Text style={styles.startMarkerText}>🏁</Text>
+                  <View style={styles.startMarkerDot} />
                 </View>
               </Marker>
             )}
@@ -598,7 +594,10 @@ function RunningView({
                 tracksViewChanges={false}
               >
                 <View style={styles.ghostMarker}>
-                  <Text style={styles.ghostMarkerText}>👻</Text>
+                  <View style={styles.ghostMarkerInner}>
+                    <View style={styles.ghostEye} />
+                    <View style={styles.ghostEye} />
+                  </View>
                 </View>
               </Marker>
             )}
@@ -639,14 +638,14 @@ function RunningView({
             style={styles.recenterBtn}
             onPress={() => setFollowCamera(true)}
           >
-            <Text style={styles.recenterText}>📍</Text>
+            <View style={styles.recenterIcon} />
           </TouchableOpacity>
         )}
 
         {/* Ghost status overlay on map */}
         {ghostPosition && run.distanceM > 5 && (
           <View style={styles.ghostOverlay}>
-            <Text style={styles.ghostOverlayIcon}>👻</Text>
+            <Text style={styles.ghostOverlayLabel}>GHOST</Text>
             <Text style={[styles.ghostOverlayText, { color: ghostLeadColor }]}>
               {ghostLeadText}
             </Text>
@@ -688,9 +687,9 @@ function RunningView({
         {liveRII > 0 && (
           <View style={styles.liveRIIBar}>
             <View style={styles.liveRIILeft}>
-              <Text style={styles.liveRIILabel}>👻 vs Ghost</Text>
+              <Text style={styles.liveRIILabel}>VS GHOST</Text>
               <Text style={[styles.liveRIIValue, { color: riiStatus.color }]}>
-                {riiStatus.emoji} RII {liveRII.toFixed(3)}
+                RII {liveRII.toFixed(3)}
               </Text>
             </View>
             <Text style={[styles.ghostLeadBadge, { color: ghostLeadColor }]}>
@@ -702,7 +701,7 @@ function RunningView({
         {/* Split times */}
         {run.splitPaces.length > 0 && (
           <View style={styles.splitsContainer}>
-            <Text style={styles.splitsTitle}>Splits</Text>
+            <Text style={styles.splitsTitle}>SPLITS</Text>
             {run.splitPaces.map((p, i) => (
               <View key={i} style={styles.splitRow}>
                 <Text style={styles.splitKm}>km {i + 1}</Text>
@@ -716,8 +715,8 @@ function RunningView({
         <View style={styles.gpsIndicator}>
           <Text style={styles.gpsLabel}>
             {currentPosition
-              ? `📍 ${currentPosition.latitude.toFixed(5)}, ${currentPosition.longitude.toFixed(5)}`
-              : '📡 Acquiring GPS...'}
+              ? `${currentPosition.latitude.toFixed(5)}, ${currentPosition.longitude.toFixed(5)}`
+              : 'ACQUIRING GPS...'}
           </Text>
           {currentPosition?.accuracy && (
             <Text style={styles.gpsAccuracy}>
@@ -839,7 +838,7 @@ function FinishedView({
                 tracksViewChanges={false}
               >
                 <View style={styles.startMarker}>
-                  <Text style={styles.startMarkerText}>🏁</Text>
+                  <View style={styles.startMarkerDot} />
                 </View>
               </Marker>
               <Marker
@@ -848,20 +847,22 @@ function FinishedView({
                 tracksViewChanges={false}
               >
                 <View style={styles.finishMarker}>
-                  <Text style={styles.finishMarkerText}>🏆</Text>
+                  <View style={styles.finishMarkerDotOuter}>
+                    <View style={styles.finishMarkerDotInner} />
+                  </View>
                 </View>
               </Marker>
             </MapView>
           )}
           <View style={styles.finishedMapBadge}>
-            <Text style={styles.finishedMapBadgeText}>🏁 Run Complete</Text>
+            <Text style={styles.finishedMapBadgeText}>RUN COMPLETE</Text>
           </View>
         </View>
       )}
 
       {/* Summary Header */}
       <View style={styles.finishHeader}>
-        <Text style={styles.finishTitle}>Great Run! 🔥</Text>
+        <Text style={styles.finishTitle}>Great Run</Text>
       </View>
 
       {/* Summary Card */}
@@ -892,7 +893,7 @@ function FinishedView({
           <Text
             style={{ color: riiStatus.color, fontWeight: '600', fontSize: 14 }}
           >
-            {riiStatus.emoji} {riiStatus.label}
+            {riiStatus.label}
           </Text>
           <Text style={styles.riiResultDesc}>
             vs PB of {formatPace(pbPace)} /km
@@ -902,20 +903,20 @@ function FinishedView({
 
       {/* GPS Stats */}
       <View style={styles.gpsStatsCard}>
-        <Text style={styles.gpsStatsTitle}>📡 GPS Quality</Text>
+        <Text style={styles.gpsStatsTitle}>GPS QUALITY</Text>
         <View style={styles.gpsStatsRow}>
           <View style={styles.gpsStatItem}>
             <Text style={styles.gpsStatValue}>{run.points.length}</Text>
             <Text style={styles.gpsStatLabel}>Total</Text>
           </View>
           <View style={styles.gpsStatItem}>
-            <Text style={[styles.gpsStatValue, { color: '#22c55e' }]}>
+            <Text style={[styles.gpsStatValue, { color: '#00FF87' }]}>
               {run.validPoints.length}
             </Text>
             <Text style={styles.gpsStatLabel}>Valid</Text>
           </View>
           <View style={styles.gpsStatItem}>
-            <Text style={[styles.gpsStatValue, { color: '#ef4444' }]}>
+            <Text style={[styles.gpsStatValue, { color: '#FF3B30' }]}>
               {run.filteredCount}
             </Text>
             <Text style={styles.gpsStatLabel}>Filtered</Text>
@@ -926,7 +927,7 @@ function FinishedView({
       {/* Splits */}
       {run.splitPaces.length > 0 && (
         <View style={styles.gpsStatsCard}>
-          <Text style={styles.gpsStatsTitle}>⏱️ Km Splits</Text>
+          <Text style={styles.gpsStatsTitle}>KM SPLITS</Text>
           {run.splitPaces.map((p, i) => (
             <View key={i} style={styles.splitRow}>
               <Text style={styles.splitKm}>km {i + 1}</Text>
@@ -937,7 +938,7 @@ function FinishedView({
       )}
 
       <TouchableOpacity style={styles.resetButton} onPress={onReset}>
-        <Text style={styles.resetButtonText}>🏃 New Run</Text>
+        <Text style={styles.resetButtonText}>NEW RUN</Text>
       </TouchableOpacity>
 
       <View style={{ height: 40 }} />
@@ -1014,7 +1015,7 @@ const styles = StyleSheet.create({
   },
   idleMapOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(10, 14, 26, 0.75)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
   },
   idleContent: {
     flex: 1,
@@ -1022,52 +1023,63 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
-  ghostEmoji: { fontSize: 64, marginBottom: 16 },
   idleTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#f1f5f9',
+    fontSize: 32,
+    fontWeight: '200',
+    color: '#FFFFFF',
     marginBottom: 8,
+    letterSpacing: 3,
   },
   idleSub: {
     fontSize: 14,
-    color: '#94a3b8',
+    color: '#8E8E93',
     textAlign: 'center',
     lineHeight: 22,
   },
   startButton: {
-    marginTop: 32,
+    marginTop: 40,
     width: 180,
     height: 180,
     borderRadius: 90,
-    backgroundColor: '#22c55e',
+    backgroundColor: '#00FF87',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#22c55e',
+    shadowColor: '#00FF87',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
+    shadowOpacity: 0.4,
+    shadowRadius: 30,
     elevation: 10,
   },
   startButtonText: {
     fontSize: 22,
-    fontWeight: '900',
-    color: '#fff',
-    letterSpacing: 2,
+    fontWeight: '700',
+    color: '#000000',
+    letterSpacing: 3,
   },
   infoRow: {
     flexDirection: 'row',
-    gap: 32,
+    gap: 12,
     marginTop: 40,
   },
-  infoItem: { alignItems: 'center' },
-  infoIcon: { fontSize: 24 },
-  infoLabel: { fontSize: 11, color: '#94a3b8', marginTop: 4 },
+  infoPill: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#38383A',
+  },
+  infoPillText: {
+    fontSize: 10,
+    color: '#8E8E93',
+    fontWeight: '600',
+    letterSpacing: 1,
+  },
   locationReady: {
     marginTop: 24,
-    fontSize: 12,
-    color: '#22c55e',
-    fontFamily: 'monospace',
+    fontSize: 11,
+    color: '#00FF87',
+    letterSpacing: 1,
+    fontWeight: '500',
   },
 
   // ── RUNNING ───────────────────────────────────────────
@@ -1093,24 +1105,22 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 6,
     paddingHorizontal: 14,
-    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+    backgroundColor: 'rgba(255, 59, 48, 0.15)',
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.4)',
   },
   liveDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#ef4444',
+    backgroundColor: '#FF3B30',
   },
   liveText: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#ef4444',
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#FF3B30',
     letterSpacing: 2,
   },
-  gpsCount: { fontSize: 10, color: '#94a3b8', marginLeft: 4 },
+  gpsCount: { fontSize: 10, color: '#8E8E93', marginLeft: 4 },
 
   recenterBtn: {
     position: 'absolute',
@@ -1119,13 +1129,17 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(26, 31, 53, 0.9)',
+    backgroundColor: 'rgba(28, 28, 30, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#2a3050',
   },
-  recenterText: { fontSize: 20 },
+  recenterIcon: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
 
   ghostOverlay: {
     position: 'absolute',
@@ -1136,12 +1150,12 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    backgroundColor: 'rgba(26, 31, 53, 0.9)',
+    backgroundColor: 'rgba(28, 28, 30, 0.9)',
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#2a3050',
   },
-  ghostOverlayIcon: { fontSize: 16 },
+  ghostOverlayLabel: {
+    fontSize: 10, fontWeight: '700', color: '#8E8E93', letterSpacing: 1,
+  },
   ghostOverlayText: { fontSize: 12, fontWeight: '700', fontFamily: 'monospace' },
 
   // Markers
@@ -1156,46 +1170,75 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: 'rgba(34, 197, 94, 0.3)',
+    backgroundColor: 'rgba(0, 255, 135, 0.3)',
   },
   runnerMarkerDot: {
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#22c55e',
+    backgroundColor: '#00FF87',
     borderWidth: 3,
     borderColor: '#fff',
   },
   ghostMarker: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(30, 20, 50, 0.8)',
-    borderRadius: 16,
+    backgroundColor: 'rgba(255, 59, 48, 0.2)',
+    borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(168, 85, 247, 0.6)',
+    borderColor: 'rgba(255, 59, 48, 0.5)',
   },
-  ghostMarkerText: { fontSize: 18 },
+  ghostMarkerInner: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  ghostEye: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#FF3B30',
+  },
   startMarker: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  startMarkerText: { fontSize: 18 },
+  startMarkerDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#00FF87',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
   finishMarker: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  finishMarkerText: { fontSize: 18 },
+  finishMarkerDotOuter: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#FFD60A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  finishMarkerDotInner: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#000000',
+  },
 
   // Stats panel
   statsPanel: {
     flex: 1,
-    backgroundColor: '#0a0e1a',
+    backgroundColor: '#000000',
   },
   statsPanelContent: {
     alignItems: 'center',
@@ -1212,14 +1255,14 @@ const styles = StyleSheet.create({
   mainStatValue: {
     fontSize: 64,
     fontWeight: '200',
-    color: '#f1f5f9',
+    color: '#FFFFFF',
     fontFamily:
       Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-thin',
   },
   mainStatUnit: {
     fontSize: 22,
     fontWeight: '400',
-    color: '#64748b',
+    color: '#636366',
     marginLeft: 4,
   },
 
@@ -1228,7 +1271,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 12,
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 8,
@@ -1237,17 +1280,18 @@ const styles = StyleSheet.create({
   liveStatItem: { flex: 1, alignItems: 'center' },
   liveStatValue: {
     fontSize: 22,
-    fontWeight: '700',
-    color: '#f1f5f9',
+    fontWeight: '600',
+    color: '#FFFFFF',
     fontFamily: 'monospace',
   },
   liveStatLabel: {
-    fontSize: 10,
-    color: '#64748b',
+    fontSize: 9,
+    color: '#636366',
     marginTop: 4,
-    textTransform: 'uppercase',
+    fontWeight: '600',
+    letterSpacing: 1,
   },
-  divider: { width: 1, height: 36, backgroundColor: '#2a3050' },
+  divider: { width: 1, height: 36, backgroundColor: '#38383A' },
 
   // Live RII
   liveRIIBar: {
@@ -1256,41 +1300,42 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginTop: 10,
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: '#2a3050',
   },
   liveRIILeft: {},
-  liveRIILabel: { fontSize: 11, color: '#94a3b8' },
-  liveRIIValue: { fontSize: 16, fontWeight: '800', fontFamily: 'monospace', marginTop: 2 },
+  liveRIILabel: {
+    fontSize: 10, color: '#8E8E93', fontWeight: '600', letterSpacing: 1,
+  },
+  liveRIIValue: { fontSize: 16, fontWeight: '700', fontFamily: 'monospace', marginTop: 2 },
   ghostLeadBadge: { fontSize: 14, fontWeight: '700', fontFamily: 'monospace' },
 
   // Splits
   splitsContainer: {
     width: '100%',
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
     padding: 16,
     marginTop: 10,
   },
   splitsTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#f1f5f9',
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#8E8E93',
     marginBottom: 8,
+    letterSpacing: 1.5,
   },
   splitRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 4,
+    paddingVertical: 6,
   },
-  splitKm: { fontSize: 13, color: '#94a3b8' },
+  splitKm: { fontSize: 13, color: '#8E8E93' },
   splitPace: {
     fontSize: 13,
-    color: '#22c55e',
+    color: '#00FF87',
     fontFamily: 'monospace',
     fontWeight: '600',
   },
@@ -1300,8 +1345,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
-  gpsLabel: { fontSize: 11, color: '#64748b', fontFamily: 'monospace' },
-  gpsAccuracy: { fontSize: 10, color: '#3b82f6', marginTop: 2 },
+  gpsLabel: { fontSize: 10, color: '#636366', fontFamily: 'monospace' },
+  gpsAccuracy: { fontSize: 10, color: '#0A84FF', marginTop: 2 },
 
   // Stop area
   stopArea: {
@@ -1313,7 +1358,7 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     borderWidth: 4,
-    borderColor: '#ef4444',
+    borderColor: '#FF3B30',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1321,12 +1366,12 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 6,
-    backgroundColor: '#ef4444',
+    backgroundColor: '#FF3B30',
   },
   stopLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '700',
-    color: '#ef4444',
+    color: '#FF3B30',
     marginTop: 6,
     letterSpacing: 2,
   },
@@ -1334,7 +1379,7 @@ const styles = StyleSheet.create({
   // ── FINISHED ──────────────────────────────────────────
   finishedScroll: {
     flex: 1,
-    backgroundColor: '#0a0e1a',
+    backgroundColor: '#000000',
   },
   finishedContent: {
     paddingHorizontal: 16,
@@ -1346,37 +1391,35 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#2a3050',
   },
   finishedMapBadge: {
     position: 'absolute',
     top: 10,
     left: 10,
-    backgroundColor: 'rgba(26, 31, 53, 0.9)',
+    backgroundColor: 'rgba(28, 28, 30, 0.9)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#22c55e40',
   },
   finishedMapBadgeText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '700',
-    color: '#22c55e',
+    color: '#00FF87',
+    letterSpacing: 1,
   },
   finishHeader: {
     alignItems: 'center',
     marginBottom: 12,
   },
   finishTitle: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: '#f1f5f9',
+    fontSize: 28,
+    fontWeight: '300',
+    color: '#FFFFFF',
+    letterSpacing: 1,
   },
   summaryCard: {
     width: '100%',
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 16,
     padding: 24,
     marginBottom: 12,
@@ -1385,45 +1428,51 @@ const styles = StyleSheet.create({
   summaryItem: { flex: 1, alignItems: 'center' },
   summaryValue: {
     fontSize: 28,
-    fontWeight: '800',
-    color: '#f1f5f9',
+    fontWeight: '700',
+    color: '#FFFFFF',
     fontFamily: 'monospace',
   },
-  summaryLabel: { fontSize: 12, color: '#64748b', marginTop: 4 },
+  summaryLabel: {
+    fontSize: 10, color: '#636366', marginTop: 4,
+    fontWeight: '600', letterSpacing: 1,
+  },
 
   // RII Result
   riiResultCard: {
     width: '100%',
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#2a3050',
+    borderColor: '#00FF8730',
   },
-  riiResultLabel: { fontSize: 13, color: '#94a3b8' },
+  riiResultLabel: {
+    fontSize: 10, color: '#8E8E93', fontWeight: '600', letterSpacing: 2,
+  },
   riiResultValue: {
-    fontSize: 44,
-    fontWeight: '800',
+    fontSize: 48,
+    fontWeight: '200',
     fontFamily: 'monospace',
     marginVertical: 4,
   },
-  riiResultDesc: { fontSize: 12, color: '#64748b', marginTop: 4 },
+  riiResultDesc: { fontSize: 12, color: '#636366', marginTop: 4 },
 
   // GPS Stats
   gpsStatsCard: {
     width: '100%',
-    backgroundColor: '#1a1f35',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
   gpsStatsTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#f1f5f9',
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#8E8E93',
     marginBottom: 10,
+    letterSpacing: 1.5,
   },
   gpsStatsRow: {
     flexDirection: 'row',
@@ -1432,14 +1481,16 @@ const styles = StyleSheet.create({
   gpsStatItem: { alignItems: 'center' },
   gpsStatValue: {
     fontSize: 22,
-    fontWeight: '800',
-    color: '#f1f5f9',
+    fontWeight: '700',
+    color: '#FFFFFF',
     fontFamily: 'monospace',
   },
   gpsStatLabel: {
-    fontSize: 11,
-    color: '#64748b',
+    fontSize: 10,
+    color: '#636366',
     marginTop: 2,
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
 
   // Reset
@@ -1447,9 +1498,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 32,
     paddingVertical: 14,
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#00FF87',
     borderRadius: 12,
     alignSelf: 'center',
   },
-  resetButtonText: { fontSize: 16, fontWeight: '700', color: '#fff' },
+  resetButtonText: {
+    fontSize: 14, fontWeight: '700', color: '#000000', letterSpacing: 1,
+  },
 });
